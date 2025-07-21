@@ -18,6 +18,15 @@ public class Repositorios {
     public static final Repositorio<Endereco, Integer> ENDERECO =
         new Repositorio<>(database, Endereco.class);
 
-    public static final Repositorio<ItemPedido, Integer> ITEM_PEDIDO =
-        new Repositorio<>(database, ItemPedido.class);
+    public static final Repositorio<ItemCarrinho, Integer> ITEM_CARRINHO =
+        new Repositorio<>(database, ItemCarrinho.class);
+        
+    public static final Repositorio<Administrador, Integer> ADMINISTRADOR =
+        new Repositorio<>(database, Administrador.class);
+        
+    public static final Repositorio<Envio, Integer> ENVIO =
+        new Repositorio<>(database, Envio.class);
+        
+    public static final Repositorio<Pagamento, Integer> PAGAMENTO =
+        new Repositorio<>(database, Pagamento.class);
 }

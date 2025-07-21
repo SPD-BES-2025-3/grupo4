@@ -16,7 +16,7 @@ import model.ItemCarrinho;
 import model.Envio;
 import model.Pagamento;
 
-import view.AppView;
+import view.AdminAppView;
 
 public class Main {
 
@@ -24,7 +24,6 @@ public class Main {
 
     public static void main(String[] args) {
         try (ConnectionSource connectionSource = new JdbcConnectionSource(DATABASE_URL)) {
-            TableUtils.createTableIfNotExists(connectionSource, Usuario.class);
             TableUtils.createTableIfNotExists(connectionSource, Endereco.class);
             TableUtils.createTableIfNotExists(connectionSource, Produto.class);
             TableUtils.createTableIfNotExists(connectionSource, Cliente.class);
@@ -40,6 +39,6 @@ public class Main {
             return;
         }
 
-        AppView.launch(AppView.class, args);
+        AdminAppView.launch(AdminAppView.class, args);
     }
 }

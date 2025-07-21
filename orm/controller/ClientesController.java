@@ -1,34 +1,155 @@
 package controller;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.event.ActionEvent;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import model.Repositorio;
+import model.Repositorios;
+import view.ClientesView;
+import model.Cliente;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClientesController implements Initializable {
+public class ClientesController extends AbstractCrudController<Cliente, ClientesView, Integer> implements Initializable {
+
+    @FXML
+    private TableView<ClientesView> tabelaClientes;
+
+    @FXML
+    private TableColumn<ClientesView, Integer> idCol;
+    @FXML
+    private TableColumn<ClientesView, String> nomeCol;
+    @FXML
+    private TableColumn<ClientesView, String> emailCol;
+    @FXML
+    private TableColumn<ClientesView, String> telefoneCol;
+
+    @FXML
+    private TextField idField;
+    @FXML
+    private TextField nomeField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField telefoneField;
+
+    @FXML
+    private Button adicionarButton;
+    @FXML
+    private Button atualizarButton;
+    @FXML
+    private Button deletarButton;
+    @FXML
+    private Button cancelarButton;
+    @FXML
+    private Button salvarButton;
+
+    private static final Repositorio<Cliente, Integer> clienteRepo = Repositorios.CLIENTE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Inicialização
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nomeCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        telefoneCol.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        super.initialize();
     }
 
-    public void onAdicionar(ActionEvent event) {
-        // TODO: implementar adicionar cliente
+    @Override
+    protected Repositorio<Cliente, Integer> getRepositorio() {
+        return clienteRepo;
     }
 
-    public void onAtualizar(ActionEvent event) {
-        // TODO: implementar atualizar cliente
+    @Override
+    protected ClientesView modelToView(Cliente c) {
+        return new ClientesView(c.getId(), c.getNome(), c.getEmail(), c.getNumeroTelefone());
     }
 
-    public void onDeletar(ActionEvent event) {
-        // TODO: implementar deletar cliente
+    @Override
+    protected Cliente viewToModel() {
+        Cliente c = new Cliente();
+        c.setNome(nomeField.getText());
+        c.setEmail(emailField.getText());
+        c.setNumeroTelefone(telefoneField.getText());
+        return c;
     }
 
-    public void onCancelar(ActionEvent event) {
-        // TODO: implementar cancelar ação
+    @Override
+    protected void preencherCampos(ClientesView cliente) {
+        idField.setText(String.valueOf(cliente.getId()));
+        nomeField.setText(cliente.getNome());
+        emailField.setText(cliente.getEmail());
+        telefoneField.setText(cliente.getTelefone());
     }
 
-    public void onSalvar(ActionEvent event) {
-        // TODO: implementar salvar cliente
+    @Override
+    protected void limparCampos() {
+        idField.clear();
+        nomeField.clear();
+        emailField.clear();
+        telefoneField.clear();
+    }
+
+    @Override
+    protected void desabilitarCampos(boolean desabilitado) {
+        nomeField.setDisable(desabilitado);
+        emailField.setDisable(desabilitado);
+        telefoneField.setDisable(desabilitado);
+    }
+
+    @Override
+    protected void desabilitarBotoes(boolean adicionar, boolean atualizar, boolean deletar, boolean cancelar, boolean salvar) {
+        adicionarButton.setDisable(adicionar);
+        atualizarButton.setDisable(atualizar);
+        deletarButton.setDisable(deletar);
+        cancelarButton.setDisable(cancelar);
+        salvarButton.setDisable(salvar);
+    }
+
+    @Override
+    protected TableView<ClientesView> getTabela() {
+        return tabelaClientes;
+    }
+
+    @Override
+    protected Integer getIdFromViewModel(ClientesView viewModel) {
+        return viewModel.getId();
+    }
+
+    @Override
+    protected void setIdOnEntity(Cliente entidade, Integer id) {
+        entidade.setId(id);
+    }
+
+    @FXML
+    public void onAdicionar() {
+        super.onAdicionar();
+        desabilitarCampos(false);
+    }
+
+    @FXML
+    public void onSalvar() {
+        System.out.println("Clicou em Adicionar:");
+        System.out.println("Nome: " + nomeField.getText());
+        System.out.println("Email: " + emailField.getText());
+        System.out.println("Telefone: " + telefoneField.getText());
+        super.onSalvar();
+    }
+
+    @FXML
+    public void onAtualizar() {
+        super.onAtualizar();
+    }
+
+    @FXML
+    public void onDeletar() {
+        super.onDeletar();
+    }
+
+    @FXML
+    public void onCancelar() {
+        super.onCancelar();
     }
 }

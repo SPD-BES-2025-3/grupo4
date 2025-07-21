@@ -1,27 +1,12 @@
 package model;
 
-import com.j256.ormlite.table.DatabaseTable;
-import com.j256.ormlite.field.DatabaseField;
-
-@DatabaseTable(tableName = "usuario")
 public class Usuario {
 
-    @DatabaseField(generatedId = true)
     private int id;
-
-    @DatabaseField(canBeNull = false)
     private String nome;
-
-    @DatabaseField(canBeNull = false, unique = true)
     private String email;
-
-    @DatabaseField(canBeNull = false)
     private String senha;
-
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false)
     private Endereco endereco;
-
-    // Getters e Setters
 
     public int getId() {
         return id;
