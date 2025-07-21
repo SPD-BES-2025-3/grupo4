@@ -39,7 +39,7 @@ O sistema é dividido nos módulos:
 Responsável pela lógica central do sistema, fornecendo APIs para operações de cadastro, consulta, atualização e remoção, utilizando MongoDB para dados não relacionais e PostgreSQL via ORMLite para dados relacionais.
 
 **Interface Desktop (JavaFX + ORMLite)**:
-Aplicação cliente e adnub com interface, utilizando ORMLite para manipular dados locais no banco PostgreSQL.
+Aplicação cliente e admin com interface, utilizando ORMLite para manipular dados locais no banco PostgreSQL.
 
 **Integração**:
 Os módulos se integram via chamadas REST e mecanismos de mensageria, garantindo sincronização dos dados e fluxo consistente entre frontend, backend e banco.
