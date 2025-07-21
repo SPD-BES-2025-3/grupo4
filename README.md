@@ -150,24 +150,37 @@ Frontend Desktop:
 
 ## Diagramas
 
-O diagrama abaixo ilustra a estrutura das principais classes do sistema:
+O sistema é composto por três grandes módulos:
+- **Aplicação Desktop:** Interface gráfica (JavaFX) conectada a um controlador MVC, que utiliza ORMLite para persistência em banco relacional (PostgreSQL).
+- **API RESTful:** Backend central (Spring Boot) que expõe endpoints REST e acessa dados relacionais (PostgreSQL).
+- **Integrador de Entidades:** (Planejado para etapas futuras) módulo responsável por integração e comunicação assíncrona entre componentes.
+
+A comunicação ocorre da seguinte forma:
+- A aplicação desktop pode operar localmente e sincronizar dados com a API via HTTP/REST.
+- A API centraliza a lógica de negócio e integra dados relacionais.
+
+Os diagramas a seguir ilustram a arquitetura e o fluxo de integração:
 
 ![Diagrama de Classes](docs/diagrama-de-classe-v1.png)  
 ![Diagrama de componentes](docs/diagrama-componentes.png)  
 ![Diagrama de sequência](docs/diagrama-sequencia.png)  
 
-<!-- 
+
 ---
 
 ## Divisão de Tarefas e Cronograma
 
-| Tarefa                        | Responsável      | Prazo        |
-|-------------------------------|------------------|--------------|
-| Documentação inicial          | Nome do membro 4 | 14/07/2025   |
-| Planejamento e cronograma     | Todos            | 15/07/2025   |
-| Desenvolvimento do projeto    | Todos            | 15/07/2025   |
-| Entrega final                 | Todos            | 28/07/2025   |
- -->
+| Tarefa                                    | Responsável      | Prazo        |
+|-------------------------------------------|------------------|--------------|
+| Entrega 1                                 | Todos            | 21/07/2025   |
+| SQLite + ORMLite + JavaFX                 | João Pedro Brito | 25/07/2025   |
+| MongoDB + Spring Boot + Redis prep        | Leonardo Côrtes  | 25/07/2025   |
+| Diagramas UML + Documentação              | Gabriel Mota     | 25/07/2025   |
+| Testes unitários                          | Gabriel Mota     | 26/07/2025   |
+| Documentação final + relatórios           | Gabriel Mota     | 27/07/2025   |
+| Integração e revisão final                | Todos            | 27/07/2025   |
+| Entrega final                             | Todos            | 28/07/2025   |
+
 <!-- ---
 
 ## Detalhamento do Plano de Trabalho e Uso das Ferramentas
