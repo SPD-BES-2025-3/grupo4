@@ -32,11 +32,17 @@ Este projeto, portanto, não apenas atende a uma demanda acadêmica, mas também
 
 A aplicação permite que clientes naveguem por produtos, adicionem itens ao carrinho, realizem pedidos, efetuem pagamentos e acompanhem o envio. Administradores podem gerenciar o catálogo de produtos e o estoque. O sistema foi projetado com base em boas práticas de orientação a objetos e segue uma arquitetura modular.
 
-**Arquitetura:** O projeto segue o padrão MVC (Model-View-Controller), onde:
+**Arquitetura:**
+O sistema é dividido nos módulos:
 
-- **Models** representam as entidades de domínio.
-- **Controllers** lidam com as requisições HTTP e direcionam o fluxo.
-- **Services** concentram a lógica de negócio, promovendo separação de responsabilidades e facilitando a manutenção e testes.
+**Backend RESTful (Spring Boot)**:
+Responsável pela lógica central do sistema, fornecendo APIs para operações de cadastro, consulta, atualização e remoção, utilizando MongoDB para dados não relacionais e PostgreSQL via ORMLite para dados relacionais.
+
+**Interface Desktop (JavaFX + ORMLite)**:
+Aplicação cliente e adnub com interface, utilizando ORMLite para manipular dados locais no banco PostgreSQL.
+
+**Integração**:
+Os módulos se integram via chamadas REST e mecanismos de mensageria, garantindo sincronização dos dados e fluxo consistente entre frontend, backend e banco.
 
 ---
 
@@ -86,15 +92,19 @@ O sistema é composto pelos seguintes principais componentes:
 
 ## Tecnologias Utilizadas
 
+Backend:
 - **Java 21+**
 - **Spring Boot**
-- **Spring Data JPA**
+- **Spring Data MongoDB**
 - **PostgreSQL** (banco de dados principal)
 - **Gradle**
 - **Docker** (utilizado para containerizar a aplicação e o banco de dados)
 - **JUnit (para testes)**
 
+Frontend Desktop:
+- **JavaFX**
 ---
+
 
 ## Como Executar
 
