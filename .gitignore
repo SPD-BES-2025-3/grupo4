@@ -25,3 +25,6 @@ replay_pid*
 
 # Arquivo com os dados pessoais de login
 .env
+
+# Gerado no ccomputador do usuario
+**/venv/
