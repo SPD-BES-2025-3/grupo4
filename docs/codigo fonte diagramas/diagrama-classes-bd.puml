@@ -43,7 +43,7 @@ package "PostgreSQL" <<PostgreSQL>> {
 package "MongoDB" <<MongoDB>>{
   package Duplicado{
     class Cliente{
-      - id: int
+      - id: String
       - nome: String
       - email: String
       - senha: String
@@ -58,7 +58,7 @@ package "MongoDB" <<MongoDB>>{
     }
 
     class Pedido {
-      - id: int
+      - id: String
       - data: Data
       - status: String
       - total: double
@@ -72,7 +72,7 @@ package "MongoDB" <<MongoDB>>{
 
   package "Estoque"{
     class Produto {
-      - id: int
+      - id: String
       - nome: String
       - descricao: String
       - preco: double
@@ -83,7 +83,7 @@ package "MongoDB" <<MongoDB>>{
     }
 
     class Carrinho {
-      - id: int
+      - id: String
       - itens: List<ItemCarrinho>
       - total: double
       + adicionarItem(p: Produto, qtd: int): void
@@ -93,6 +93,7 @@ package "MongoDB" <<MongoDB>>{
     }
 
     class ItemCarrinho {
+      - id: String
       - produto: Produto
       - quantidade: int
       + subtotal(): double
@@ -100,7 +101,7 @@ package "MongoDB" <<MongoDB>>{
   }
 
   class Pagamento {
-    - id: int
+    - id: String
     - dadosPagamento: Data
     - valor: double
     - metodo: String
@@ -109,7 +110,7 @@ package "MongoDB" <<MongoDB>>{
   }
 
   class Envio {
-    - id: int
+    - id: String
     - enderecoEntrega: String
     - dataEnvio: Data
     - status: String

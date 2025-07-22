@@ -25,3 +25,7 @@ class Pagamento(Document):
         # Add logic to interact with payment gateway
         self.status = "processado"
         return True
+
+    def __str__(self) -> str:
+        return (f"{self.id}: Pagamento: R$ {self.valor:.2f} via {self.metodo} "
+                f"({self.status}) - {self.dados_pagamento}")
