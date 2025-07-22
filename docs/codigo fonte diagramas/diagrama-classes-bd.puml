@@ -1,0 +1,135 @@
+@startuml Classe
+' Diagrama de Classes - E-commerce Completo com Cardinalidade
+
+skinparam package {
+  BackgroundColor<<MongoDB>> #d7fab0ff
+  BackgroundColor<<PostgreSQL>> #d1d3ffff
+  BorderColor Black
+}
+
+package "PostgreSQL" <<PostgreSQL>> {
+  class Usuario {
+    - id: hash
+    - nome: String
+    - email: String
+    - senha: String
+    + login(): boolean
+    + logout(): void
+    + atualizarPerfil(): void
+  }
+  class Administrador {
+    + adicionarProduto(p: Produto): void
+    + removerProduto(p: Produto): void
+    + atualizarEstoque(p: Produto, qtd: int): void
+  }
+
+  package Duplicado{
+    class ClienteCRM {
+      - numeroTelefone: String
+      + adicionarAoCarrinho(p: Produto): void
+      + fazerPedido(): Pedido
+    }
+
+    class PedidoCRM {
+      - id: hash
+      - data: Data
+      - status: String
+      - cliente: ClienteCRM
+      - observacoes: String
+    }
+  }
+}
+
+package "MongoDB" <<MongoDB>>{
+  package Duplicado{
+    class Cliente{
+      - id: int
+      - nome: String
+      - email: String
+      - senha: String
+      - endereco: String
+
+      + login(): boolean
+      + logout(): void
+      + atualizarPerfil(): void
+
+      + adicionarAoCarrinho(p: Produto): void
+      + fazerPedido(): Pedido
+    }
+
+    class Pedido {
+      - id: int
+      - data: Data
+      - status: String
+      - total: double
+      - cliente: Cliente
+      - pagamento: Pagamento
+      - envio: Envio
+      + cancelar(): void
+      + atualizarStatus(s: String): void
+    }
+  }
+
+  package "Estoque"{
+    class Produto {
+      - id: int
+      - nome: String
+      - descricao: String
+      - preco: double
+      - estoque: int
+      - categoria: String
+      + atualizarEstoque(qtd: int): void
+      + aplicarDesconto(percentual: double): void
+    }
+
+    class Carrinho {
+      - id: int
+      - itens: List<ItemCarrinho>
+      - total: double
+      + adicionarItem(p: Produto, qtd: int): void
+      + removerItem(p: Produto): void
+      + calcularTotal(): double
+      + esvaziar(): void
+    }
+
+    class ItemCarrinho {
+      - produto: Produto
+      - quantidade: int
+      + subtotal(): double
+    }
+  }
+
+  class Pagamento {
+    - id: int
+    - dadosPagamento: Data
+    - valor: double
+    - metodo: String
+    - status: String
+    + processar(): boolean
+  }
+
+  class Envio {
+    - id: int
+    - enderecoEntrega: String
+    - dataEnvio: Data
+    - status: String
+    + rastrear(): String
+  }
+}
+
+' Relações de Herança
+Usuario <|-- Administrador
+Usuario <|-- ClienteCRM
+
+' Relações com Cardinalidade
+Cliente "1" <--> "1" ClienteCRM
+Pedido "1" <--> "1" PedidoCRM
+Cliente "1" --> "1" Carrinho
+Carrinho "1" --> "0..*" ItemCarrinho
+ItemCarrinho "1" --> "1" Produto
+Cliente "1" --> "0..*" Pedido
+ClienteCRM "1" --> "0..*" PedidoCRM
+Pedido "1" --> "1" Pagamento
+Pedido "1" --> "1" Envio
+
+@enduml

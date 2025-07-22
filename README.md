@@ -35,14 +35,14 @@ A aplicação permite que clientes naveguem por produtos, adicionem itens ao car
 **Arquitetura:**
 O sistema é dividido nos módulos:
 
-**Backend RESTful (Spring Boot)**:
-Responsável pela lógica central do sistema, fornecendo APIs para operações de cadastro, consulta, atualização e remoção, utilizando MongoDB para dados não relacionais e PostgreSQL via ORMLite para dados relacionais.
+1. **Backend RESTful (FastAPI + Beanie + MongoDB)**  
+   Responsável pela lógica de e-commerce, exposição de APIs REST para operações com produtos, carrinho, pedidos e pagamentos. Utiliza MongoDB para dados não relacionais e Redis para cache, sessões e filas, garantindo performance e escalabilidade.
 
-**Interface Desktop (JavaFX + ORMLite)**:
-Aplicação cliente e admin com interface, utilizando ORMLite para manipular dados locais no banco PostgreSQL.
+2. **Interface Desktop (JavaFX + ORMLite + PostgreSQL)**  
+   Aplicação desktop para CRM, administração e gerenciamento dos dados relacionais do cliente, produtos e usuários. Utiliza PostgreSQL via ORMLite para persistência.
 
-**Integração**:
-Os módulos se integram via chamadas REST e mecanismos de mensageria, garantindo sincronização dos dados e fluxo consistente entre frontend, backend e banco.
+3. **Integração**  
+   Comunicação entre os módulos feita via chamadas REST API e mecanismos de mensageria (ex: Redis). Os dados dos clientes são sincronizados entre o CRM (PostgreSQL) e o backend e-commerce (MongoDB), assegurando consistência entre os sistemas.
 
 ---
 
@@ -71,7 +71,6 @@ O sistema é composto pelos seguintes principais componentes:
 ### Produto e Estoque
 
 - **Produto**: Representa um item à venda, com atributos como nome, descrição, preço, estoque e categoria.
-- **Categoria**: Agrupa produtos similares.
 
 ### Carrinho e Pedido
 
@@ -84,27 +83,37 @@ O sistema é composto pelos seguintes principais componentes:
 - **Pagamento**: Detalha o método, valor e status do pagamento de um pedido.
 - **Envio**: Gerencia o endereço de entrega, data e status do envio.
 
-### Endereço
-
-- **Endereco**: Utilizado tanto por usuários quanto para o envio dos pedidos.
-
 ---
 
 ## Tecnologias Utilizadas
 
-Backend:
-- **Java 21+**
-- **Spring Boot**
-- **Spring Data MongoDB**
-- **PostgreSQL** (banco de dados principal)
-- **Gradle**
-- **Docker** (utilizado para containerizar a aplicação e o banco de dados)
-- **JUnit (para testes)**
+### **Frontend Desktop (CRM)**
 
-Frontend Desktop:
-- **JavaFX**
+- **JavaFX** – Interface gráfica para o sistema desktop (CRM)
+- **BlueJ** – Ambiente de desenvolvimento para a aplicação Java
+- **ORM manual ou JDBC** – Acesso ao PostgreSQL via JDBC ou ORM próprio
+- **PostgreSQL** – Banco de dados relacional para gerenciamento de clientes e administrativos
+
 ---
 
+### **Backend E-commerce (API REST)**
+
+- **Python 3.12+**
+- **FastAPI** – Framework leve e moderno para APIs REST
+- **Beanie** – ODM baseado em Pydantic para interação com MongoDB
+- **Redis** – Cache, gerenciamento de sessões e/ou fila de mensagens para melhorar performance e escalabilidade
+- **MongoDB** – Banco de dados NoSQL utilizado para produtos, carrinho, pedidos, etc.
+- **Pytest** – Framework para testes automatizados
+- **Docker** – Utilizado para containerizar a API, MongoDB e ambientes de teste
+
+---
+
+### **Integração**
+
+- **Comunicação via REST API** entre a aplicação Java (CRM) e o backend Python (e-commerce)
+- Dados sincronizados entre **Cliente\_Postgre** e **Cliente\_Mongo**
+
+---
 
 ## Como Executar
 
@@ -151,11 +160,13 @@ Frontend Desktop:
 ## Diagramas
 
 O sistema é composto por três grandes módulos:
+
 - **Aplicação Desktop:** Interface gráfica (JavaFX) conectada a um controlador MVC, que utiliza ORMLite para persistência em banco relacional (PostgreSQL).
-- **API RESTful:** Backend central (Spring Boot) que expõe endpoints REST e acessa dados relacionais (PostgreSQL).
+- **API RESTful:** Backend central (FastAPI) que expõe endpoints REST e acessa dados não-relacionais via MongoDB com Beanie (ODM baseada em Pydantic).
 - **Integrador de Entidades:** (Planejado para etapas futuras) módulo responsável por integração e comunicação assíncrona entre componentes.
 
 A comunicação ocorre da seguinte forma:
+
 - A aplicação desktop pode operar localmente e sincronizar dados com a API via HTTP/REST.
 - A API centraliza a lógica de negócio e integra dados relacionais.
 
@@ -164,7 +175,7 @@ Os diagramas a seguir ilustram a arquitetura e o fluxo de integração:
 ![Diagrama de Classes](docs/diagrama-de-classe-v1.png)  
 ![Diagrama de componentes](docs/diagrama-componentes.png)  
 ![Diagrama de sequência](docs/diagrama-sequencia.png)  
-
+![Diagrama de classes por BD](docs/diagrama-classes-bd.png)
 
 ---
 
@@ -172,9 +183,9 @@ Os diagramas a seguir ilustram a arquitetura e o fluxo de integração:
 
 | Tarefa                                    | Responsável      | Prazo        |
 |-------------------------------------------|------------------|--------------|
-| Entrega 1                                 | Todos            | 21/07/2025   |
-| SQLite + ORMLite + JavaFX                 | João Pedro Brito | 25/07/2025   |
-| MongoDB + Spring Boot + Redis prep        | Leonardo Côrtes  | 25/07/2025   |
+| Entrega 1                                 | Todos            | 22/07/2025   |
+| PostgreSQL + ORMLite + JavaFX             | João Pedro Brito | 25/07/2025   |
+| MongoDB + FastAPI + Redis prep            | Leonardo Côrtes  | 25/07/2025   |
 | Diagramas UML + Documentação              | Gabriel Mota     | 25/07/2025   |
 | Testes unitários                          | Gabriel Mota     | 26/07/2025   |
 | Documentação final + relatórios           | Gabriel Mota     | 27/07/2025   |
@@ -205,7 +216,7 @@ O grupo está se familiarizando com as principais ferramentas e frameworks do pr
 
 ## Plano de Testes
 
-Os testes unitários serão implementados utilizando JUnit. Inicialmente, os testes cobrirão as classes principais do domínio e, posteriormente, serão expandidos para repositórios e controllers. Exemplos de casos de teste planejados:
+Os testes unitários serão implementados utilizando JUnit e PyTest. Inicialmente, os testes cobrirão as classes principais do domínio e, posteriormente, serão expandidos para repositórios e controllers. Exemplos de casos de teste planejados:
 
 - Criação de um novo usuário e verificação dos dados persistidos.
 - Cadastro e consulta de produtos.

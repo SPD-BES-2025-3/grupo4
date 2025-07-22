@@ -1,4 +1,4 @@
-@startuml sequencia
+@startuml
 !theme plain
 
 actor Usuario

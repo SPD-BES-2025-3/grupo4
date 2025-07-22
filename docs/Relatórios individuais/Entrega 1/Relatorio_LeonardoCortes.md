@@ -2,11 +2,11 @@
 
 ## 1. Atribuição e responsabilidades
 
-Fui responsável pela preparação do backend com Spring Boot e pela configuração inicial para futura integração com Redis. Também participei do planejamento técnico do projeto.
+Fui responsável pela preparação do backend com Beanie e MongoDB. Também participei do planejamento técnico do projeto.
 
 ## 2. Contribuição conforme atribuição
 
-- Estruturei o projeto Spring Boot e organizei as dependências do backend.
+- Estruturei o projeto Beanie e organizei as dependências do backend.
 - Colaborei na discussão e documentação da arquitetura do sistema.
 - Ajudei Gabriel Mota na elaboração e revisão da documentação e dos diagramas UML.
 - A integração completa com Redis será realizada nas próximas etapas.

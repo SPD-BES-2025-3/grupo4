@@ -1,5 +1,5 @@
 @startuml Classe
-' Diagrama de Classes - E-commerce Completo
+' Diagrama de Classes - E-commerce Completo com Cardinalidade
 
 package "Usuário" {
   class Usuario {
@@ -92,12 +92,12 @@ package "Pagamento e Envio" {
 Usuario <|-- Administrador
 Usuario <|-- Cliente
 
-' Relações de Composição e Agregação
-Cliente ||--|| Carrinho
-Carrinho ||--o{ ItemCarrinho
-ItemCarrinho }o--|| Produto
-Cliente ||--o{ Pedido
-Pedido ||--|| Pagamento
-Pedido ||--|| Envio
+' Relações com Cardinalidade
+Cliente "1" --> "1" Carrinho
+Carrinho "1" --> "0..*" ItemCarrinho
+ItemCarrinho "1" --> "1" Produto
+Cliente "1" --> "0..*" Pedido
+Pedido "1" --> "1" Pagamento
+Pedido "1" --> "1" Envio
 
 @enduml

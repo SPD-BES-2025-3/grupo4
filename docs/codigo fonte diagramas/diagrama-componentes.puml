@@ -1,29 +1,35 @@
 @startuml componentes
-package "Aplicação Desktop" {
+skinparam packageBackgroundColor #f0f0f0
+skinparam packageBorderColor black
+
+package "Aplicação Desktop (CRM)" {
   [JavaFX UI] 
   [Controlador MVC]
-  [ORM Lite] 
+  [ORM Lite]
   [PostgreSQL]
+
   [JavaFX UI] --> [Controlador MVC]
   [Controlador MVC] --> [ORM Lite]
   [ORM Lite] --> [PostgreSQL]
 }
 
-package "API RESTful" {
+package "API RESTful (E-commerce)" {
   [FastAPI]
   [Beanie ODM]
   [MongoDB]
+
   [FastAPI] --> [Beanie ODM]
   [Beanie ODM] --> [MongoDB]
 }
 
-package "Integrador de Entidades" {
+package "Integração & Mensageria" {
   [Redis Pub/Sub]
-  [Lettuce Client]
-  [Spring Boot API] --> [Lettuce Client]
-  [Lettuce Client] --> [Redis Pub/Sub]
+  [Spring Boot API]
+
+  [Spring Boot API] --> [Redis Pub/Sub]
 }
 
-[Aplicação Desktop] ..> [API RESTful] : HTTP/REST
-[API RESTful] ..> [Integrador de Entidades] : Mensageria (Pub/Sub)
+' Comunicação entre sistemas
+[Aplicação Desktop (CRM)] ..> [API RESTful (E-commerce)] : HTTP / REST API
+[API RESTful (E-commerce)] ..> [Integração & Mensageria] : Mensageria (Pub/Sub)
 @enduml
