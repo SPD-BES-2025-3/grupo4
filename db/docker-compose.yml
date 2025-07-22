@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./db:/data/db           # Bind mount to local db folder
+      - ./data:/data/db           # Bind mount to local data folder
       - ./configdb:/data/configdb  # Optional metadata storage
     networks:
       - mongo_net
