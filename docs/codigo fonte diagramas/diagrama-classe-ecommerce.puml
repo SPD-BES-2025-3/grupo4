@@ -19,21 +19,10 @@ package "Usuário" {
   }
   
   class Cliente {
-    - endereco: Endereco
+    - endereco: String
     - numeroTelefone: String
     + adicionarAoCarrinho(p: Produto): void
     + fazerPedido(): Pedido
-  }
-}
-
-package "Endereço" {
-  class Endereco {
-    - rua: String
-    - numero: String
-    - cidade: String
-    - estado: String
-    - cep: String
-    - pais: String
   }
 }
 
@@ -44,15 +33,9 @@ package "Produto e Estoque" {
     - descricao: String
     - preco: double
     - estoque: int
-    - categoria: Categoria
+    - categoria: String
     + atualizarEstoque(qtd: int): void
     + aplicarDesconto(percentual: double): void
-  }
-  
-  class Categoria {
-    - id: int
-    - nome: String
-    + listarProdutos(): List<Produto>
   }
 }
 
@@ -98,7 +81,7 @@ package "Pagamento e Envio" {
   
   class Envio {
     - id: int
-    - enderecoEntrega: Endereco
+    - enderecoEntrega: String
     - dataEnvio: Data
     - status: String
     + rastrear(): String
@@ -110,14 +93,11 @@ Usuario <|-- Administrador
 Usuario <|-- Cliente
 
 ' Relações de Composição e Agregação
-Cliente ||--|| Endereco
 Cliente ||--|| Carrinho
 Carrinho ||--o{ ItemCarrinho
 ItemCarrinho }o--|| Produto
-Categoria ||--o{ Produto
 Cliente ||--o{ Pedido
 Pedido ||--|| Pagamento
 Pedido ||--|| Envio
-Envio }o--|| Endereco
 
 @enduml
