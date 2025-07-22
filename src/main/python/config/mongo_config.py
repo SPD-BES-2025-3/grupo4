@@ -8,9 +8,14 @@ import asyncio
 DATABASE_URL = "mongodb://localhost:27017"
 DATABASE_NAME = "ecommerce"
 
+from models.pagamento import Pagamento
+
 client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URL)
 database = client[DATABASE_NAME]
 
 async def init():
     # Initialize Beanie ODM with your database models
-    await init_beanie(database, document_models=[Product])
+    await init_beanie(
+        database, 
+        document_models=[Pagamento]
+    )

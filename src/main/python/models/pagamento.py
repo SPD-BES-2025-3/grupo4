@@ -1,0 +1,27 @@
+from beanie import Document
+from pydantic import BaseModel, Field
+from datetime import datetime
+from typing import Literal
+
+class DadosPagamento(BaseModel):
+    # Define fields according to your payment data structure
+    tipo: str
+    numero: str
+    validade: str
+
+class Pagamento(Document):
+    dados_pagamento: DadosPagamento
+    valor: float
+    metodo: Literal["cartao", "boleto", "pix", "paypal"]  # you can expand this
+    status: Literal["pendente", "processado", "falhou"] = "pendente"
+
+    class Settings:
+        name = "pagamentos"  # MongoDB collection name
+
+    def processar(self) -> bool:
+        # Simulate payment processing logic
+        if self.status != "pendente":
+            return False
+        # Add logic to interact with payment gateway
+        self.status = "processado"
+        return True
