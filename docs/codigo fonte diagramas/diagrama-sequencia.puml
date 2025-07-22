@@ -1,29 +1,15 @@
-@startuml
-package "Aplicação Desktop" {
-  [JavaFX UI] 
-  [Controlador MVC]
-  [ORM Lite] 
-  [SQLite]
-  [JavaFX UI] --> [Controlador MVC]
-  [Controlador MVC] --> [ORM Lite]
-  [ORM Lite] --> [SQLite]
-}
+@startuml sequencia
+!theme plain
 
-package "API RESTful" {
-  [Spring Boot API]
-  [Spring Data ODM]
-  [MongoDB]
-  [Spring Boot API] --> [Spring Data ODM]
-  [Spring Data ODM] --> [MongoDB]
-}
+actor Usuario
+participant "Aplicação Desktop" as App
+participant "API RESTful" as API
+participant "Redis Pub/Sub" as Redis
 
-package "Integrador de Entidades" {
-  [Redis Pub/Sub]
-  [Lettuce Client]
-  [Spring Boot API] --> [Lettuce Client]
-  [Lettuce Client] --> [Redis Pub/Sub]
-}
+Usuario -> App: Solicita novo pedido
+App -> API: POST /pedidos
+API -> Redis: Publica evento "novo pedido"
+Redis -> API: Confirma publicação
+API -> App: Responde sucesso
 
-[Aplicação Desktop] ..> [API RESTful] : HTTP/REST
-[API RESTful] ..> [Integrador de Entidades] : Mensageria (Pub/Sub)
 @enduml

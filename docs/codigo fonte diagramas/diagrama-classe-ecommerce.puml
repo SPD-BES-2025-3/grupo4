@@ -1,0 +1,123 @@
+@startuml Classe
+' Diagrama de Classes - E-commerce Completo
+
+package "Usuário" {
+  class Usuario {
+    - id: int
+    - nome: String
+    - email: String
+    - senha: String
+    + login(): boolean
+    + logout(): void
+    + atualizarPerfil(): void
+  }
+  
+  class Administrador {
+    + adicionarProduto(p: Produto): void
+    + removerProduto(p: Produto): void
+    + atualizarEstoque(p: Produto, qtd: int): void
+  }
+  
+  class Cliente {
+    - endereco: Endereco
+    - numeroTelefone: String
+    + adicionarAoCarrinho(p: Produto): void
+    + fazerPedido(): Pedido
+  }
+}
+
+package "Endereço" {
+  class Endereco {
+    - rua: String
+    - numero: String
+    - cidade: String
+    - estado: String
+    - cep: String
+    - pais: String
+  }
+}
+
+package "Produto e Estoque" {
+  class Produto {
+    - id: int
+    - nome: String
+    - descricao: String
+    - preco: double
+    - estoque: int
+    - categoria: Categoria
+    + atualizarEstoque(qtd: int): void
+    + aplicarDesconto(percentual: double): void
+  }
+  
+  class Categoria {
+    - id: int
+    - nome: String
+    + listarProdutos(): List<Produto>
+  }
+}
+
+package "Carrinho e Pedido" {
+  class Carrinho {
+    - id: int
+    - itens: List<ItemCarrinho>
+    - total: double
+    + adicionarItem(p: Produto, qtd: int): void
+    + removerItem(p: Produto): void
+    + calcularTotal(): double
+    + esvaziar(): void
+  }
+  
+  class ItemCarrinho {
+    - produto: Produto
+    - quantidade: int
+    + subtotal(): double
+  }
+  
+  class Pedido {
+    - id: int
+    - data: Data
+    - status: String
+    - total: double
+    - cliente: Cliente
+    - pagamento: Pagamento
+    - envio: Envio
+    + cancelar(): void
+    + atualizarStatus(s: String): void
+  }
+}
+
+package "Pagamento e Envio" {
+  class Pagamento {
+    - id: int
+    - dadosPagamento: Data
+    - valor: double
+    - metodo: String
+    - status: String
+    + processar(): boolean
+  }
+  
+  class Envio {
+    - id: int
+    - enderecoEntrega: Endereco
+    - dataEnvio: Data
+    - status: String
+    + rastrear(): String
+  }
+}
+
+' Relações de Herança
+Usuario <|-- Administrador
+Usuario <|-- Cliente
+
+' Relações de Composição e Agregação
+Cliente ||--|| Endereco
+Cliente ||--|| Carrinho
+Carrinho ||--o{ ItemCarrinho
+ItemCarrinho }o--|| Produto
+Categoria ||--o{ Produto
+Cliente ||--o{ Pedido
+Pedido ||--|| Pagamento
+Pedido ||--|| Envio
+Envio }o--|| Endereco
+
+@enduml
