@@ -2,7 +2,7 @@
 
 import asyncio
 from config.mongo_config import init
-from models.pagamento import Pagamento, DadosPagamento
+from models.pagamento import Pagamento
 from repositories.pagamento_repository import *
 
 class PagamentoCRUD:
@@ -56,11 +56,13 @@ class PagamentoCRUD:
         print("\n➕ CRIAR NOVO PAGAMENTO")
         
         try:
-            # Coletar dados do pagamento
+            # Coletar dados do pagamento como string
             print("\n--- Dados do Cartão/Pagamento ---")
-            tipo = input("Tipo (ex: Visa, MasterCard, PIX): ").strip()
-            numero = input("Número: ").strip()
-            validade = input("Validade (MM/AA): ").strip()
+            dados_pagamento = input("Dados do pagamento (ex: Visa **** 1234 - 12/25): ").strip()
+            
+            if not dados_pagamento:
+                print("❌ Dados do pagamento não podem estar vazios.")
+                return
             
             print("\n--- Dados do Pagamento ---")
             valor_str = input("Valor (R$): ").strip()
@@ -73,8 +75,7 @@ class PagamentoCRUD:
                 print("❌ Método inválido!")
                 return
             
-            # Criar objetos
-            dados_pagamento = DadosPagamento(tipo=tipo, numero=numero, validade=validade)
+            # Criar pagamento
             pagamento = Pagamento(
                 dados_pagamento=dados_pagamento,
                 valor=valor,
@@ -110,6 +111,11 @@ class PagamentoCRUD:
         print("\n--- O que deseja atualizar? (deixe em branco para manter) ---")
         
         updates = {}
+        
+        # Dados do pagamento
+        novos_dados = input(f"Novos dados do pagamento (atual: {pagamento.dados_pagamento}): ").strip()
+        if novos_dados:
+            updates["dados_pagamento"] = novos_dados
         
         # Valor
         novo_valor = input(f"Novo valor (atual: R$ {pagamento.valor:.2f}): ").strip()

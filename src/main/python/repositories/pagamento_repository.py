@@ -19,7 +19,7 @@ async def criar_pagamento(pagamento: Pagamento) -> Pagamento:
     await pagamento.insert()
     return pagamento
 
-async def buscar_pagamento(id: str) -> Pagamento | None:
+async def buscar_pagamento(id: str) -> Optional[Pagamento]:
     """Find a payment by ID with validation"""
     if not is_valid_object_id(id):
         return None
@@ -33,7 +33,7 @@ async def listar_pagamentos() -> list[Pagamento]:
     """List all payments"""
     return await Pagamento.find_all().to_list()
 
-async def atualizar_pagamento(id: str, dados_atualizacao: Dict[str, Any]) -> Pagamento | None:
+async def atualizar_pagamento(id: str, dados_atualizacao: Dict[str, Any]) -> Optional[Pagamento]:
     """Update a payment by ID with provided data"""
     if not is_valid_object_id(id):
         return None
@@ -49,7 +49,7 @@ async def atualizar_pagamento(id: str, dados_atualizacao: Dict[str, Any]) -> Pag
     except Exception:
         return None
 
-async def atualizar_pagamento_completo(pagamento: Pagamento) -> Pagamento | None:
+async def atualizar_pagamento_completo(pagamento: Pagamento) -> Optional[Pagamento]:
     """Update a complete payment object"""
     if not pagamento.id:
         return None

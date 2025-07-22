@@ -102,7 +102,7 @@ package "MongoDB" <<MongoDB>>{
 
   class Pagamento {
     - id: String
-    - dadosPagamento: Data
+    - dadosPagamento: String
     - valor: double
     - metodo: String
     - status: String

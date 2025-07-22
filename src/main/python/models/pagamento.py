@@ -3,14 +3,8 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Literal
 
-class DadosPagamento(BaseModel):
-    # Define fields according to your payment data structure
-    tipo: str
-    numero: str
-    validade: str
-
 class Pagamento(Document):
-    dados_pagamento: DadosPagamento
+    dados_pagamento: str
     valor: float
     metodo: Literal["cartao", "boleto", "pix", "paypal"]  # you can expand this
     status: Literal["pendente", "processado", "falhou"] = "pendente"
