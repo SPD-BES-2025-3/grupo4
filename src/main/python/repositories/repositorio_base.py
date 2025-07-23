@@ -1,5 +1,3 @@
-# repositories/repositorio_base.py
-
 from typing import TypeVar, Generic, Optional, Dict, Any, Type
 from beanie import Document
 

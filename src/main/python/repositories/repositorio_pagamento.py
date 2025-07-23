@@ -1,5 +1,3 @@
-# repositories/repositorio_pagamento.py
-
 from repositories.repositorio_base import RepositorioBase
 from models.pagamento import Pagamento
 from typing import List
