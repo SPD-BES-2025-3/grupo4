@@ -29,6 +29,7 @@ replay_pid*
 # Gerado no ccomputador do usuario
 **/venv/
 **/__pycache__/
+**/*cache/
 
 # Dados desnecessarios do MongoDB
 **/*.lock
