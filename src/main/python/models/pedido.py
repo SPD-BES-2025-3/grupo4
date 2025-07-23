@@ -33,7 +33,6 @@ class Pedido(Document):
 
         itens_pedido = [
             ItemPedido(
-                id=item.id,
                 produto=item.produto,
                 quantidade=item.quantidade,
                 preco_unitario=item.produto.preco

@@ -7,41 +7,38 @@ import pytest_asyncio
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from faker import Faker
-from models.produto import Produto
-from repositories.repositorio_produto import RepositorioProduto
+from models.pagamento import Pagamento
+from repositories.repositorio_pagamento import RepositorioPagamento
 
-# Configuração de ambiente
 fake = Faker("pt_BR")
-MONGO_TEST_URI = "mongodb://localhost:27017/test_db_produto"
-
+MONGO_TEST_URI = "mongodb://localhost:27017/test_db_pagamento"
 
 @pytest_asyncio.fixture(scope="function")
 async def init_db():
     client = AsyncIOMotorClient(MONGO_TEST_URI)
     db = client.get_default_database()
-    await init_beanie(database=db, document_models=[Produto])
+    await init_beanie(database=db, document_models=[Pagamento])
     yield
     await client.drop_database(db.name)
     client.close()
 
 @pytest_asyncio.fixture
 async def repo(init_db):
-    return RepositorioProduto()
+    return RepositorioPagamento()
 
 @pytest_asyncio.fixture
-def produto_data():
+def pagamento_data():
     return {
-        "nome": fake.word().capitalize(),
-        "descricao": fake.sentence(),
-        "preco": round(fake.pyfloat(left_digits=2, right_digits=2, positive=True), 2),
-        "estoque": fake.random_int(min=0, max=100),
-        "categoria": fake.word().capitalize(),
+        "dados_pagamento": fake.credit_card_full(),
+        "valor": round(fake.pyfloat(left_digits=2, right_digits=2, positive=True), 2),
+        "metodo": fake.random_element(elements=["cartao", "boleto", "pix", "paypal"]),
+        "status": "pendente"
     }
 
 @pytest.mark.asyncio
-async def test_criar_e_buscar_por_id(repo, produto_data):
-    produto = Produto(**produto_data)
-    criado = await repo.criar(produto)
+async def test_criar_e_buscar_por_id(repo, pagamento_data):
+    pagamento = Pagamento(**pagamento_data)
+    criado = await repo.criar(pagamento)
     assert criado.id is not None
 
     buscado = await repo.buscar_por_id(str(criado.id))
@@ -49,51 +46,51 @@ async def test_criar_e_buscar_por_id(repo, produto_data):
     assert buscado.id == criado.id
 
 @pytest.mark.asyncio
-async def test_listar_todos(repo, produto_data):
-    await repo.criar(Produto(**produto_data))
+async def test_listar_todos(repo, pagamento_data):
+    await repo.criar(Pagamento(**pagamento_data))
     resultados = await repo.listar_todos()
     assert isinstance(resultados, list)
     assert len(resultados) >= 1
 
 @pytest.mark.asyncio
-async def test_atualizar_por_id(repo, produto_data):
-    produto = await repo.criar(Produto(**produto_data))
-    atualizado = await repo.atualizar_por_id(str(produto.id), {"descricao": "Descrição atualizada"})
-    assert atualizado.descricao == "Descrição atualizada"
+async def test_atualizar_por_id(repo, pagamento_data):
+    pagamento = await repo.criar(Pagamento(**pagamento_data))
+    atualizado = await repo.atualizar_por_id(str(pagamento.id), {"status": "processado"})
+    assert atualizado.status == "processado"
 
 @pytest.mark.asyncio
-async def test_atualizar_completo(repo, produto_data):
-    produto = await repo.criar(Produto(**produto_data))
-    produto.nome = "Novo Nome"
-    atualizado = await repo.atualizar_completo(produto)
-    assert atualizado.nome == "Novo Nome"
+async def test_atualizar_completo(repo, pagamento_data):
+    pagamento = await repo.criar(Pagamento(**pagamento_data))
+    pagamento.status = "falhou"
+    atualizado = await repo.atualizar_completo(pagamento)
+    assert atualizado.status == "falhou"
 
 @pytest.mark.asyncio
-async def test_deletar_por_id(repo, produto_data):
-    produto = await repo.criar(Produto(**produto_data))
-    resultado = await repo.deletar_por_id(str(produto.id))
+async def test_deletar_por_id(repo, pagamento_data):
+    pagamento = await repo.criar(Pagamento(**pagamento_data))
+    resultado = await repo.deletar_por_id(str(pagamento.id))
     assert resultado is True
 
-    buscado = await repo.buscar_por_id(str(produto.id))
+    buscado = await repo.buscar_por_id(str(pagamento.id))
     assert buscado is None
 
 @pytest.mark.asyncio
-async def test_deletar_por_objeto(repo, produto_data):
-    produto = await repo.criar(Produto(**produto_data))
-    resultado = await repo.deletar_por_objeto(produto)
+async def test_deletar_por_objeto(repo, pagamento_data):
+    pagamento = await repo.criar(Pagamento(**pagamento_data))
+    resultado = await repo.deletar_por_objeto(pagamento)
     assert resultado is True
 
 @pytest.mark.asyncio
-async def test_contar_total(repo, produto_data):
-    await repo.criar(Produto(**produto_data))
-    await repo.criar(Produto(**produto_data))
+async def test_contar_total(repo, pagamento_data):
+    await repo.criar(Pagamento(**pagamento_data))
+    await repo.criar(Pagamento(**pagamento_data))
     total = await repo.contar_total()
     assert total >= 2
 
 @pytest.mark.asyncio
-async def test_verificar_existe(repo, produto_data):
-    produto = await repo.criar(Produto(**produto_data))
-    existe = await repo.verificar_existe(str(produto.id))
+async def test_verificar_existe(repo, pagamento_data):
+    pagamento = await repo.criar(Pagamento(**pagamento_data))
+    existe = await repo.verificar_existe(str(pagamento.id))
     assert existe is True
 
     nao_existe = await repo.verificar_existe("000000000000000000000000")

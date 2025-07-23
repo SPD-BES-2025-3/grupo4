@@ -10,3 +10,6 @@ class ItemCarrinho(BaseModel):
 
     def subtotal(self) -> float:
         return self.produto.preco * self.quantidade
+    
+    def __str__(self) -> str:
+        return f"{self.quantidade} x {self.produto.nome} (R$ {self.subtotal():.2f})"

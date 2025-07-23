@@ -7,6 +7,7 @@ from models.produto import Produto
 
 # Package Estoque
 class Carrinho(Document):
+    cliente_id: Optional[str] = Field(default=None)  
     itens: List[ItemCarrinho] = Field(default_factory=list)
     total: float = 0.0
 

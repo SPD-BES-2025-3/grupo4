@@ -11,6 +11,6 @@ class ItemPedido(BaseModel):
 
     def __str__(self) -> str:
         return (
-            f"{self.id}: {self.quantidade} x {self.produto.nome} "
+            f"{self.quantidade} x {self.produto.nome} "
             f"@ R$ {self.preco_unitario:.2f} = R$ {self.subtotal():.2f}"
         )
