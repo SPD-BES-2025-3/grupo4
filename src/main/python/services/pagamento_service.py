@@ -1,10 +1,11 @@
 # services/pagamento_service.py
 
 from models.pagamento import Pagamento
-from repositories.pagamento_repository import buscar_pagamento
+from main.python.repositories.repositorio_pagamento import RepositorioPagamento
 
 async def processar_pagamento(id: str) -> bool:
-    pagamento = await buscar_pagamento(id)
+    repositorio_pagamento = RepositorioPagamento()
+    pagamento = await repositorio_pagamento.buscar_por_id(id)
     if pagamento and pagamento.processar():
         await pagamento.save()
         return True

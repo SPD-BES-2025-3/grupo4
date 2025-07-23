@@ -3,11 +3,12 @@
 import asyncio
 from config.mongo_config import init
 from models.pagamento import Pagamento
-from repositories.pagamento_repository import *
+from repositories.repositorio_pagamento import RepositorioPagamento
 
 class PagamentoCRUD:
     def __init__(self):
         self.running = True
+        self.repo = RepositorioPagamento()
 
     async def mostrar_menu(self):
         print("\n" + "="*50)
@@ -24,7 +25,7 @@ class PagamentoCRUD:
 
     async def listar_pagamentos_menu(self):
         print("\n📋 LISTANDO TODOS OS PAGAMENTOS...")
-        pagamentos = await listar_pagamentos()
+        pagamentos = await self.repo.listar_todos()
         
         if not pagamentos:
             print("❌ Nenhum pagamento encontrado.")
@@ -45,7 +46,7 @@ class PagamentoCRUD:
             print("❌ ID não pode estar vazio.")
             return
         
-        pagamento = await buscar_pagamento(pagamento_id)
+        pagamento = await self.repo.buscar_por_id(pagamento_id)
         if pagamento:
             print(f"\n✅ Pagamento encontrado:")
             print(f"   {pagamento}")
@@ -83,7 +84,7 @@ class PagamentoCRUD:
             )
             
             # Salvar no banco
-            pagamento_criado = await criar_pagamento(pagamento)
+            pagamento_criado = await self.repo.criar(pagamento)
             print(f"\n✅ Pagamento criado com sucesso!")
             print(f"   {pagamento_criado}")
             
@@ -102,7 +103,7 @@ class PagamentoCRUD:
             return
         
         # Verificar se existe
-        pagamento = await buscar_pagamento(pagamento_id)
+        pagamento = await self.repo.buscar_por_id(pagamento_id)
         if not pagamento:
             print("❌ Pagamento não encontrado ou ID inválido.")
             return
@@ -146,7 +147,7 @@ class PagamentoCRUD:
             return
         
         try:
-            pagamento_atualizado = await atualizar_pagamento(pagamento_id, updates)
+            pagamento_atualizado = await self.repo.atualizar_por_id(pagamento_id, updates)
             if pagamento_atualizado:
                 print(f"\n✅ Pagamento atualizado com sucesso!")
                 print(f"   {pagamento_atualizado}")
@@ -165,7 +166,7 @@ class PagamentoCRUD:
             return
         
         # Mostrar o pagamento antes de deletar
-        pagamento = await buscar_pagamento(pagamento_id)
+        pagamento = await self.repo.buscar_por_id(pagamento_id)
         if not pagamento:
             print("❌ Pagamento não encontrado ou ID inválido.")
             return
@@ -176,7 +177,7 @@ class PagamentoCRUD:
         confirmacao = input("\n⚠️  Tem certeza? Esta ação não pode ser desfeita! (s/N): ").strip().lower()
         
         if confirmacao in ['s', 'sim', 'y', 'yes']:
-            sucesso = await deletar_pagamento(pagamento_id)
+            sucesso = await self.repo.deletar_por_id(pagamento_id)
             if sucesso:
                 print("✅ Pagamento deletado com sucesso!")
             else:
@@ -188,10 +189,10 @@ class PagamentoCRUD:
         print("\n📊 ESTATÍSTICAS DO SISTEMA")
         
         try:
-            total = await contar_pagamentos()
-            pendentes = await contar_pagamentos_por_status("pendente")
-            processados = await contar_pagamentos_por_status("processado")
-            falharam = await contar_pagamentos_por_status("falhou")
+            total = await self.repo.contar_total()
+            pendentes = await self.repo.contar_pagamentos_por_status("pendente")
+            processados = await self.repo.contar_pagamentos_por_status("processado")
+            falharam = await self.repo.contar_pagamentos_por_status("falhou")
             
             print(f"""
 ┌─────────────────────────────────┐

@@ -35,3 +35,4 @@ replay_pid*
 **/*.lock
 **/diagnostic.data/
 **/journal/
+**/.mongodb
