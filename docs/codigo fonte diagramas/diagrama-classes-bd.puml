@@ -1,4 +1,4 @@
-@startuml Classe
+@startuml diagrama-classes-bd
 ' Diagrama de Classes - E-commerce Completo com Cardinalidade
 
 skinparam package {
@@ -65,6 +65,7 @@ package "MongoDB" <<MongoDB>>{
       - cliente: Cliente
       - pagamento: Pagamento
       - envio: Envio
+      - itens: List<ItemPedido>
       + cancelar(): void
       + atualizarStatus(s: String): void
     }
@@ -98,38 +99,54 @@ package "MongoDB" <<MongoDB>>{
       - quantidade: int
       + subtotal(): double
     }
+
+    class ItemPedido {
+      - id: String
+      - produto: Produto
+      - quantidade: int
+      - precoUnitario: double
+      + subtotal(): double
+    }
   }
 
-  class Pagamento {
-    - id: String
-    - dadosPagamento: String
-    - valor: double
-    - metodo: String
-    - status: String
-    + processar(): boolean
-  }
+  package "Pós compra"{
+    class Pagamento {
+      - id: String
+      - dadosPagamento: String
+      - valor: double
+      - metodo: String
+      - status: String
+      + processar(): boolean
+    }
 
-  class Envio {
-    - id: String
-    - enderecoEntrega: String
-    - dataEnvio: Data
-    - status: String
-    + rastrear(): String
+    class Envio {
+      - id: String
+      - enderecoEntrega: String
+      - dataEnvio: Data
+      - status: String
+      + rastrear(): String
+    }
   }
 }
 
-' Relações de Herança
+'
+' Relações com Cardinalidade
+'   Duplicidade entre os DBs
+Cliente "1" <--> "1" ClienteCRM
+Pedido "1" <--> "1" PedidoCRM
+
+'   PostgreSQL
+ClienteCRM "1" --> "0..*" PedidoCRM
 Usuario <|-- Administrador
 Usuario <|-- ClienteCRM
 
-' Relações com Cardinalidade
-Cliente "1" <--> "1" ClienteCRM
-Pedido "1" <--> "1" PedidoCRM
-Cliente "1" --> "1" Carrinho
+'   MongoDB
+Pedido "1" --> "0..*" ItemPedido
+ItemPedido "1" --> "1" Produto
+Cliente "1" --> "0..1" Carrinho
 Carrinho "1" --> "0..*" ItemCarrinho
 ItemCarrinho "1" --> "1" Produto
 Cliente "1" --> "0..*" Pedido
-ClienteCRM "1" --> "0..*" PedidoCRM
 Pedido "1" --> "1" Pagamento
 Pedido "1" --> "1" Envio
 

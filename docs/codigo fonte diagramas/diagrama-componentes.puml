@@ -1,4 +1,4 @@
-@startuml componentes
+@startuml diagrama-componentes
 skinparam packageBackgroundColor #f0f0f0
 skinparam packageBorderColor black
 

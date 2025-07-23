@@ -1,4 +1,4 @@
-@startuml Classe
+@startuml diagrama-de-classe-v1
 ' Diagrama de Classes - E-commerce Completo com Cardinalidade
 
 package "Usuário" {
@@ -55,6 +55,14 @@ package "Carrinho e Pedido" {
     - quantidade: int
     + subtotal(): double
   }
+
+  class ItemPedido {
+      - id: String
+      - produto: Produto
+      - quantidade: int
+      - precoUnitario: double
+      + subtotal(): double
+    }
   
   class Pedido {
     - id: int
@@ -64,6 +72,7 @@ package "Carrinho e Pedido" {
     - cliente: Cliente
     - pagamento: Pagamento
     - envio: Envio
+    - itens: List<ItemPedido>
     + cancelar(): void
     + atualizarStatus(s: String): void
   }
@@ -99,5 +108,7 @@ ItemCarrinho "1" --> "1" Produto
 Cliente "1" --> "0..*" Pedido
 Pedido "1" --> "1" Pagamento
 Pedido "1" --> "1" Envio
+Pedido "1" --> "0..*" ItemPedido
+ItemPedido "1" --> "1" Produto
 
 @enduml
