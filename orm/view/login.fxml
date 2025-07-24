@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.LoginController"
-            prefWidth="400" prefHeight="350">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.LoginController" prefWidth="300" prefHeight="200">
+    <Label text="Usuário:" layoutX="20" layoutY="40"/>
+    <TextField fx:id="emailField" layoutX="100" layoutY="35" prefWidth="160"/>
     
-    <VBox alignment="CENTER" spacing="15.0" AnchorPane.topAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0">
-        
-        <Label text="Login do Sistema" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-        
-        <TextField fx:id="emailField" promptText="Email" />
-        
-        <PasswordField fx:id="senhaField" promptText="Senha" />
-        
-        <Button text="Entrar" onAction="#handleLogin" maxWidth="200" />
-        
-        <Button text="Cadastrar Cliente" onAction="#abrirTelaCadastro" maxWidth="200" />
-    </VBox>
-
+    <Label text="Senha:" layoutX="20" layoutY="80"/>
+    <PasswordField fx:id="senhaField" layoutX="100" layoutY="75" prefWidth="160"/>
+    
+    <Button text="Entrar" layoutX="100" layoutY="130" prefWidth="80" onAction="#handleLogin"/>
+    
+    <Label fx:id="mensagemLabel" layoutX="20" layoutY="170" prefWidth="260" style="-fx-text-fill: red;" />
 </AnchorPane>

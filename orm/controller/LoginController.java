@@ -3,23 +3,27 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+
 import model.*;
-import java.sql.SQLException;
 
 public class LoginController {
 
     @FXML private TextField emailField;
     @FXML private PasswordField senhaField;
+    @FXML private Label mensagemLabel;  // novo: para mostrar erros na tela
 
     private Database database;
 
     public LoginController() {
+        // inicialize sua conexão com o banco
         database = new Database("app.sqlite");
     }
 
@@ -27,50 +31,56 @@ public class LoginController {
     private void handleLogin() {
         String email = emailField.getText().trim();
         String senha = senhaField.getText().trim();
-    
+
+        // Limpa mensagem antiga
+        mensagemLabel.setText("");
+
         try {
+            // Dao para Cliente
             Dao<Cliente, Integer> clienteDao = DaoManager.createDao(database.getConnection(), Cliente.class);
             Cliente cliente = clienteDao.queryBuilder()
-                .where().eq("email", email).and().eq("senha", senha)
-                .queryForFirst();
-    
+                    .where().eq("email", email).and().eq("senha", senha)
+                    .queryForFirst();
+
             if (cliente != null) {
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                Parent root = FXMLLoader.load(getClass().getResource("/view/appCliente.fxml"));
-                stage.setScene(new Scene(root));
-                stage.setTitle("Cliente");
+                Sessao.setCliente(cliente);
+                abrirTela("/view/ClienteApp.fxml", "Cliente");
                 return;
             }
-    
+
+            // Dao para Administrador
             Dao<Administrador, Integer> adminDao = DaoManager.createDao(database.getConnection(), Administrador.class);
             Administrador admin = adminDao.queryBuilder()
-                .where().eq("email", email).and().eq("senha", senha)
-                .queryForFirst();
-    
+                    .where().eq("email", email).and().eq("senha", senha)
+                    .queryForFirst();
+
             if (admin != null) {
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                Parent root = FXMLLoader.load(getClass().getResource("/view/appAdmin.fxml"));
-                stage.setScene(new Scene(root));
-                stage.setTitle("Admin");
+                abrirTela("/view/adminApp.fxml", "Admin");
                 return;
             }
-    
-            System.out.println("Login inválido.");
+
+            // Se chegou aqui, login inválido
+            mensagemLabel.setText("Email ou senha inválidos.");
         } catch (Exception e) {
             e.printStackTrace();
+            mensagemLabel.setText("Erro ao tentar efetuar login.");
         }
+    }
+
+    private void abrirTela(String fxmlPath, String titulo) throws Exception {
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+        stage.setScene(new Scene(root));
+        stage.setTitle(titulo);
     }
 
     @FXML
     private void abrirTelaCadastro() {
         try {
-            Stage stage = (Stage) emailField.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/view/cadastro_cliente.fxml"));
-            stage.setScene(new Scene(root));
-            stage.setTitle("Cadastro de Cliente");
+            abrirTela("/view/cadastro_cliente.fxml", "Cadastro de Cliente");
         } catch (Exception e) {
             e.printStackTrace();
+            mensagemLabel.setText("Erro ao abrir cadastro.");
         }
     }
-    
 }
