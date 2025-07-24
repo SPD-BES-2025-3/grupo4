@@ -36,6 +36,38 @@ Este projeto usa [`pytest`](https://docs.pytest.org/) e [`pytest-asyncio`](https
 
 ---
 
+## 🚀 Como rodar o FastAPI
+
+Este projeto utiliza [FastAPI](https://fastapi.tiangolo.com/) para construir uma API moderna, rápida e assíncrona. Siga os passos abaixo para iniciar a aplicação:
+
+### ▶️ Executar a API localmente
+
+1. **Verifique se todas as dependências estão instaladas** conforme a seção anterior.
+
+2. **Execute o servidor com Uvicorn:**
+
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+   - `main`: nome do arquivo Python onde está a instância `FastAPI()`.
+   - `app`: nome da variável que representa a instância da aplicação.
+   - `--reload`: habilita o modo de recarregamento automático em desenvolvimento.
+
+3. **Acesse a documentação automática:**
+
+    Abra seu navegador e visite:
+
+   - [Docs](http://127.0.0.1:8000/docs)
+
+   ou
+
+   - [Redoc](http://127.0.0.1:8000/redoc)
+
+   Ambas oferecem uma visualização interativa da API baseada nos endpoints definidos no projeto.
+
+---
+
 ## 🧪 Rodar os testes
 
 Execute o seguinte comando na raiz do projeto para rodar todos os testes com detalhes:
