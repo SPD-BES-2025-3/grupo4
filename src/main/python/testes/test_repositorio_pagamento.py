@@ -1,4 +1,5 @@
 import pytest
+import pytest_asyncio
 import asyncio
 import sys
 import os
@@ -18,6 +19,21 @@ fake = Faker('pt_BR')
 
 # Test database configuration
 TEST_DATABASE_URL = os.getenv("TEST_MONGO_URI", "mongodb://localhost:27017/test_pagamentos_db")
+
+import redis.asyncio as redis
+from config.redis_cache import RedisCache
+
+@pytest_asyncio.fixture(scope="function")
+async def redis_cache():
+    try:
+        client = redis.Redis(host="localhost", port=6379, db=1, decode_responses=True)
+        await client.ping()
+        cache = RedisCache(host="localhost", port=6379, db=1)
+        yield cache
+        await client.flushdb()
+    except redis.ConnectionError:
+        pytest.skip("Redis server not available, skipping cache-related tests.")
+
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -44,9 +60,9 @@ async def clean_database(beanie_initialized):  # ensures correct loop context
 
 
 @pytest.fixture
-async def repo(clean_database):
+async def repo(clean_database, redis_cache):
     """Initialize repository instance for tests."""
-    return RepositorioPagamento()
+    return RepositorioPagamento(cache=redis_cache)
 
 
 @pytest.mark.asyncio

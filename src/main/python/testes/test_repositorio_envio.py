@@ -14,6 +14,22 @@ from repositories.repositorio_base import RepositorioBase
 fake = Faker("pt_BR")
 MONGO_TEST_URI = "mongodb://localhost:27017/test_db_envio"
 
+
+import redis.asyncio as redis
+from config.redis_cache import RedisCache
+
+@pytest_asyncio.fixture(scope="function")
+async def redis_cache():
+    try:
+        client = redis.Redis(host="localhost", port=6379, db=1, decode_responses=True)
+        await client.ping()
+        cache = RedisCache(host="localhost", port=6379, db=1)
+        yield cache
+        await client.flushdb()
+    except redis.ConnectionError:
+        pytest.skip("Redis server not available, skipping cache-related tests.")
+
+
 @pytest_asyncio.fixture(scope="function")
 async def init_db():
     client = AsyncIOMotorClient(MONGO_TEST_URI)
@@ -24,8 +40,8 @@ async def init_db():
     client.close()
 
 @pytest_asyncio.fixture
-async def repo(init_db):
-    return RepositorioBase(Envio)
+async def repo(init_db, redis_cache):
+    return RepositorioBase(Envio, cache=redis_cache)
 
 @pytest_asyncio.fixture
 def envio_data():
