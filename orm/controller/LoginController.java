@@ -18,12 +18,12 @@ public class LoginController {
 
     @FXML private TextField emailField;
     @FXML private PasswordField senhaField;
-    @FXML private Label mensagemLabel;  // novo: para mostrar erros na tela
+    @FXML private Label mensagemLabel;
 
     private Database database;
 
     public LoginController() {
-        // inicialize sua conexão com o banco
+
         database = new Database("app.sqlite");
     }
 
@@ -32,11 +32,9 @@ public class LoginController {
         String email = emailField.getText().trim();
         String senha = senhaField.getText().trim();
 
-        // Limpa mensagem antiga
         mensagemLabel.setText("");
 
         try {
-            // Dao para Cliente
             Dao<Cliente, Integer> clienteDao = DaoManager.createDao(database.getConnection(), Cliente.class);
             Cliente cliente = clienteDao.queryBuilder()
                     .where().eq("email", email).and().eq("senha", senha)
@@ -48,7 +46,6 @@ public class LoginController {
                 return;
             }
 
-            // Dao para Administrador
             Dao<Administrador, Integer> adminDao = DaoManager.createDao(database.getConnection(), Administrador.class);
             Administrador admin = adminDao.queryBuilder()
                     .where().eq("email", email).and().eq("senha", senha)
@@ -59,7 +56,6 @@ public class LoginController {
                 return;
             }
 
-            // Se chegou aqui, login inválido
             mensagemLabel.setText("Email ou senha inválidos.");
         } catch (Exception e) {
             e.printStackTrace();
