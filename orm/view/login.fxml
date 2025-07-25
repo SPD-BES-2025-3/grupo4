@@ -6,14 +6,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.LoginController" prefWidth="300" prefHeight="200">
-    <Label text="Usuário:" layoutX="20" layoutY="40"/>
-    <TextField fx:id="emailField" layoutX="100" layoutY="35" prefWidth="160"/>
+<AnchorPane prefHeight="244.0" prefWidth="300" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+    <Label layoutX="20" layoutY="40" text="Usuário:" />
+    <TextField fx:id="emailField" layoutX="100" layoutY="35" prefWidth="160" />
     
-    <Label text="Senha:" layoutX="20" layoutY="80"/>
-    <PasswordField fx:id="senhaField" layoutX="100" layoutY="75" prefWidth="160"/>
+    <Label layoutX="20" layoutY="80" text="Senha:" />
+    <PasswordField fx:id="senhaField" layoutX="100" layoutY="75" prefWidth="160" />
     
-    <Button text="Entrar" layoutX="100" layoutY="130" prefWidth="80" onAction="#handleLogin"/>
+    <Button layoutX="110.0" layoutY="122.0" onAction="#handleLogin" prefWidth="80" text="Entrar" />
     
     <Label fx:id="mensagemLabel" layoutX="20" layoutY="170" prefWidth="260" style="-fx-text-fill: red;" />
+    <Label layoutX="105.0" layoutY="162.0" onMouseClicked="#abrirTelaCadastro" style="-fx-text-fill: blue; -fx-underline: true; cursor: hand;" text="Cadastrar Cliente" />
 </AnchorPane>

@@ -6,6 +6,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 
 import model.Cliente;
 import model.Endereco;
@@ -74,7 +80,12 @@ public class CadastroClienteController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Cliente cadastrado com sucesso!");
             alert.showAndWait();
-
+            
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+            Stage stage = (Stage) salvarButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+            
             limparCampos();
 
         } catch (Exception e) {
@@ -103,5 +114,17 @@ public class CadastroClienteController implements Initializable {
         cidadeField.clear();
         estadoField.clear();
         cepField.clear();
+    }
+    
+    @FXML
+    private void handleVoltarLogin(MouseEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -73,7 +73,7 @@ public class LoginController {
     @FXML
     private void abrirTelaCadastro() {
         try {
-            abrirTela("/view/cadastro_cliente.fxml", "Cadastro de Cliente");
+            abrirTela("/view/Cadastro_cliente.fxml", "Cadastro de Cliente");
         } catch (Exception e) {
             e.printStackTrace();
             mensagemLabel.setText("Erro ao abrir cadastro.");
