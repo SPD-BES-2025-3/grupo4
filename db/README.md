@@ -24,6 +24,14 @@ docker-compose ps
 
 ---
 
+## 🔹 Ativar o terminal do redis
+
+```bash
+docker exec -it redis redis-cli
+```
+
+---
+
 ## 🔹 Finalizar os serviços
 
 Para parar os containers e remover todos os recursos criados:
