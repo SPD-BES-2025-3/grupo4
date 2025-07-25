@@ -13,6 +13,21 @@ from repositories.repositorio_pagamento import RepositorioPagamento
 fake = Faker("pt_BR")
 MONGO_TEST_URI = "mongodb://localhost:27017/test_db_pagamento"
 
+import redis.asyncio as redis
+from config.redis_cache import RedisCache
+
+@pytest_asyncio.fixture(scope="function")
+async def redis_cache():
+    try:
+        client = redis.Redis(host="localhost", port=6379, db=1, decode_responses=True)
+        await client.ping()
+        cache = RedisCache(host="localhost", port=6379, db=1)
+        yield cache
+        await client.flushdb()
+    except redis.ConnectionError:
+        pytest.skip("Redis server not available, skipping cache-related tests.")
+
+
 @pytest_asyncio.fixture(scope="function")
 async def init_db():
     client = AsyncIOMotorClient(MONGO_TEST_URI)
@@ -23,8 +38,8 @@ async def init_db():
     client.close()
 
 @pytest_asyncio.fixture
-async def repo(init_db):
-    return RepositorioPagamento()
+async def repo(init_db, redis_cache):
+    return RepositorioPagamento(cache=redis_cache)
 
 @pytest_asyncio.fixture
 def pagamento_data():

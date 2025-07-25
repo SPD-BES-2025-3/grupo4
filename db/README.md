@@ -1,26 +1,40 @@
-# 🐳 Como rodar o MongoDB com Docker Compose
+# 🐳 Executando MongoDB e Redis com Docker Compose
 
-Este projeto utiliza **Docker Compose** para executar uma instância local do MongoDB voltada aos testes e ao desenvolvimento.
+Este projeto utiliza **Docker Compose** para iniciar instâncias locais do **MongoDB** e do **Redis**, facilitando testes e o desenvolvimento.
 
-## 🔹 Iniciar o MongoDB
+---
 
-Para subir o serviço do MongoDB em segundo plano:
+## 🔹 Subir os serviços
+
+Para iniciar os containers do MongoDB e Redis em segundo plano:
 
 ```bash
 docker-compose up -d
 ```
 
+---
+
 ## 🔹 Verificar o status dos containers
 
-Para listar todos os containers em execução e verificar o estado do MongoDB:
+Para visualizar os containers em execução e conferir o estado dos serviços:
 
 ```bash
 docker-compose ps
 ```
 
-## 🔹 Encerrar o MongoDB
+---
 
-Para parar e remover os containers criados:
+## 🔹 Ativar o terminal do redis
+
+```bash
+docker exec -it redis redis-cli
+```
+
+---
+
+## 🔹 Finalizar os serviços
+
+Para parar os containers e remover todos os recursos criados:
 
 ```bash
 docker-compose down

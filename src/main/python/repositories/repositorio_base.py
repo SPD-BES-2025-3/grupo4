@@ -1,4 +1,5 @@
 from typing import TypeVar, Generic, Optional, Dict, Any, Type
+from config.redis_cache import RedisCache
 from beanie import Document
 
 T = TypeVar('T', bound=Document)
@@ -10,13 +11,14 @@ class RepositorioBase(Generic[T]):
     para qualquer modelo que herde de Document do Beanie.
     """
     
-    def __init__(self, modelo: Type[T]):
+    def __init__(self, modelo: Type[T], cache: Optional[RedisCache] = None):
         """Inicializa o repositório com o modelo especificado.
         
         Args:
             modelo (Type[T]): Classe do modelo que herda de Document.
         """
         self.modelo = modelo
+        self.cache = cache
     
     def eh_object_id_valido(self, id_string: str) -> bool:
         """Verifica se a string é um formato válido de ObjectId do MongoDB.
@@ -48,19 +50,19 @@ class RepositorioBase(Generic[T]):
         return entidade
     
     async def buscar_por_id(self, id: str) -> Optional[T]:
-        """Busca uma entidade pelo ID com validação.
-        
-        Args:
-            id (str): ID da entidade a ser buscada.
-            
-        Returns:
-            Optional[T]: A entidade encontrada ou None se não encontrada ou ID inválido.
-        """
         if not self.eh_object_id_valido(id):
             return None
-        
+
+        if self.cache:
+            cached = await self.cache.get(f"{self.modelo.__name__}:{id}")
+            if cached:
+                self.modelo.model_validate_json(cached)
+
         try:
-            return await self.modelo.get(id)
+            entidade = await self.modelo.get(id)
+            if entidade and self.cache:
+                await self.cache.set(f"{self.modelo.__name__}:{id}", entidade.model_dump_json())
+            return entidade
         except Exception:
             return None
     
@@ -73,28 +75,13 @@ class RepositorioBase(Generic[T]):
         return await self.modelo.find_all().to_list()
     
     async def atualizar_por_id(self, id: str, dados_atualizacao: Dict[str, Any]) -> Optional[T]:
-        """Atualiza uma entidade pelo ID com os dados fornecidos.
-        
-        Args:
-            id (str): ID da entidade a ser atualizada.
-            dados_atualizacao (Dict[str, Any]): Dicionário com os dados a serem atualizados.
-            
-        Returns:
-            Optional[T]: A entidade atualizada ou None se não encontrada ou ID inválido.
-        """
-        if not self.eh_object_id_valido(id):
+        entidade = await self.buscar_por_id(id)
+        if not entidade:
             return None
-        
-        try:
-            entidade = await self.modelo.get(id)
-            if not entidade:
-                return None
-            
-            # Atualiza o documento com os novos dados
-            await entidade.set(dados_atualizacao)
-            return entidade
-        except Exception:
-            return None
+        await entidade.set(dados_atualizacao)
+        if self.cache:
+            await self.cache.set(f"{self.modelo.__name__}:{id}", entidade.model_dump_json())
+        return entidade
     
     async def atualizar_completo(self, entidade: T) -> Optional[T]:
         """Atualiza um objeto de entidade completo.
@@ -116,26 +103,13 @@ class RepositorioBase(Generic[T]):
         return entidade
     
     async def deletar_por_id(self, id: str) -> bool:
-        """Deleta uma entidade pelo ID com validação.
-        
-        Args:
-            id (str): ID da entidade a ser deletada.
-            
-        Returns:
-            bool: True se deletada com sucesso, False caso contrário.
-        """
-        if not self.eh_object_id_valido(id):
+        entidade = await self.buscar_por_id(id)
+        if not entidade:
             return False
-        
-        try:
-            entidade = await self.modelo.get(id)
-            if not entidade:
-                return False
-            
-            await entidade.delete()
-            return True
-        except Exception:
-            return False
+        await entidade.delete()
+        if self.cache:
+            await self.cache.delete(f"{self.modelo.__name__}:{id}")
+        return True
     
     async def deletar_por_objeto(self, entidade: T) -> bool:
         """Deleta um objeto de entidade.
