@@ -1,7 +1,7 @@
 package model;
 
 public class Repositorios {
-    public static Database database = new Database("app.sqlite");
+    public static Database database = new Database("projetospd");
 
     public static final Repositorio<Produto, Integer> PRODUTO =
         new Repositorio<>(database, Produto.class);

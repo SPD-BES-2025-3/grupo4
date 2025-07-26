@@ -24,7 +24,7 @@ public class LoginController {
 
     public LoginController() {
 
-        database = new Database("app.sqlite");
+        database = new Database("projetospd");
     }
 
     @FXML

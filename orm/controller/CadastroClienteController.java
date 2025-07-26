@@ -45,7 +45,7 @@ public class CadastroClienteController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            database = new Database("app.sqlite");
+            database = new Database("projetospd");
             clienteDao = DaoManager.createDao(database.getConnection(), Cliente.class);
             enderecoDao = DaoManager.createDao(database.getConnection(), Endereco.class);
         } catch (Exception e) {

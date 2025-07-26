@@ -20,10 +20,12 @@ import view.AdminAppView;
 
 public class Main {
 
-    private static final String DATABASE_URL = "jdbc:sqlite:app.sqlite";
+    private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/projetospd";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "123456";
 
     public static void main(String[] args) {
-        try (ConnectionSource connectionSource = new JdbcConnectionSource(DATABASE_URL)) {
+        try (ConnectionSource connectionSource = new JdbcConnectionSource(DATABASE_URL, USER, PASSWORD)) {
             TableUtils.createTableIfNotExists(connectionSource, Endereco.class);
             TableUtils.createTableIfNotExists(connectionSource, Produto.class);
             TableUtils.createTableIfNotExists(connectionSource, Cliente.class);
@@ -39,6 +41,6 @@ public class Main {
             return;
         }
 
-        AdminAppView.launch(AdminAppView.class, args);
+        //AdminAppView.launch(AdminAppView.class, args);
     }
 }
