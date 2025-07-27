@@ -9,7 +9,7 @@ router = criar_crud_router(Carrinho, repositorio, "Carrinho")
 
 # CRUD
 ## Create
-@router.post("/{carrinho_id}/itens")
+@router.post("/{carrinho_id}/itens", summary="Adicionar item ao carrinho", description="Adiciona um produto ao carrinho especificado pelo ID. É necessário informar o ID do produto e a quantidade desejada. Retorna o carrinho atualizado.")
 async def adicionar_item(carrinho_id: str, produto_id: str, quantidade: int):
     carrinho = await Carrinho.get(carrinho_id)
     if not carrinho:
@@ -26,7 +26,7 @@ async def adicionar_item(carrinho_id: str, produto_id: str, quantidade: int):
     return carrinho
 
 ## Retrieve
-@router.get("/{carrinho_id}/itens/{produto_id}")
+@router.get("/{carrinho_id}/itens/{produto_id}", summary="Obter item do carrinho", description="Retorna os detalhes de um item específico (produto) dentro do carrinho, incluindo nome, quantidade, preço unitário e subtotal. Retorna erro 404 se não encontrado.")
 async def obter_item_carrinho(carrinho_id: str, produto_id: str):
     carrinho = await Carrinho.get(carrinho_id)
     if not carrinho:
@@ -43,7 +43,7 @@ async def obter_item_carrinho(carrinho_id: str, produto_id: str):
 
     raise HTTPException(status_code=404, detail="Item não encontrado no carrinho")
 
-@router.get("/{carrinho_id}/itens")
+@router.get("/{carrinho_id}/itens", summary="Listar itens do carrinho", description="Lista todos os itens presentes no carrinho especificado pelo ID. Retorna uma lista de itens com detalhes de cada produto.")
 async def listar_itens(carrinho_id: str):
     carrinho = await Carrinho.get(carrinho_id)
     if not carrinho:
@@ -52,7 +52,7 @@ async def listar_itens(carrinho_id: str):
     return {"itens": carrinho.itens}
 
 ## Update
-@router.patch("/{carrinho_id}/itens/{produto_id}")
+@router.patch("/{carrinho_id}/itens/{produto_id}", summary="Atualizar quantidade de item no carrinho", description="Atualiza a quantidade de um item (produto) já presente no carrinho. É necessário informar a nova quantidade. Retorna o carrinho atualizado.")
 async def atualizar_quantidade_item(carrinho_id: str, produto_id: str, nova_quantidade: int):
     carrinho = await Carrinho.get(carrinho_id)
     if not carrinho:
@@ -74,7 +74,7 @@ async def atualizar_quantidade_item(carrinho_id: str, produto_id: str, nova_quan
     raise HTTPException(status_code=404, detail="Item não encontrado no carrinho")
 
 ## Delete
-@router.delete("/{carrinho_id}/itens/{produto_id}")
+@router.delete("/{carrinho_id}/itens/{produto_id}", summary="Remover item do carrinho", description="Remove um item (produto) do carrinho especificado. Retorna mensagem de sucesso ou erro se o item não for encontrado.")
 async def remover_item(carrinho_id: str, produto_id: str):
     carrinho = await Carrinho.get(carrinho_id)
     if not carrinho:
