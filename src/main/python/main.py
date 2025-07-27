@@ -9,7 +9,17 @@ from api.router_pagamento import router as pagamento_router
 from api.router_pedido import router as pedido_router
 from api.router_produto import router as produto_router
 
-app = FastAPI(title="Estoque API")
+app = FastAPI(
+    title="Estoque API",
+    description="""
+    API para gerenciamento de estoque, pedidos, pagamentos, clientes, envios e carrinhos de compras.
+    
+    Permite operações CRUD completas, além de endpoints customizados para manipulação de itens em carrinhos e pedidos.
+    """,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -19,7 +29,17 @@ async def lifespan(app: FastAPI):
     # Shutdown logic (if needed)
     print("App is shutting down...")
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan,
+    title="Estoque API",
+    description="""
+    API para gerenciamento de estoque, pedidos, pagamentos, clientes, envios e carrinhos de compras.
+    
+    Permite operações CRUD completas, além de endpoints customizados para manipulação de itens em carrinhos e pedidos.
+    """,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
 
 app.include_router(carrinho_router, prefix="/carrinho", tags=["Carrinho"])
 app.include_router(cliente_router, prefix="/cliente", tags=["Cliente"])

@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+      - ./data:/db/data
       - ./configdb:/data/configdb
     networks:
       - backend_net
