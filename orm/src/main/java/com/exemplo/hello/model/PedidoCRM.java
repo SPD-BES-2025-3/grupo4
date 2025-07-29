@@ -5,8 +5,8 @@ import com.j256.ormlite.field.DatabaseField;
 
 import java.util.Date;
 
-@DatabaseTable(tableName = "pedido")
-public class Pedido {
+@DatabaseTable(tableName = "pedido_crm")
+public class PedidoCRM {
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -21,7 +21,7 @@ public class Pedido {
     private double total;
 
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
-    private Cliente cliente;
+    private ClienteCRM cliente;
 
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private Pagamento pagamento;

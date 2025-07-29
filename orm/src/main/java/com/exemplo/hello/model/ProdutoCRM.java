@@ -3,8 +3,8 @@ package com.exemplo.hello.model;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.field.DatabaseField;
 
-@DatabaseTable(tableName = "produto")
-public class Produto {
+@DatabaseTable(tableName = "produto_crm")
+public class ProdutoCRM {
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -20,9 +20,6 @@ public class Produto {
 
     @DatabaseField(canBeNull = false)
     private int estoque;
-
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false)
-    private Categoria categoria;
 
     // Getters e Setters
 
@@ -64,13 +61,5 @@ public class Produto {
 
     public void setEstoque(int estoque) {
         this.estoque = estoque;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
     }
 }

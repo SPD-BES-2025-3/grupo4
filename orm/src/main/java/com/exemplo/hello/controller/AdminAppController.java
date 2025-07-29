@@ -14,11 +14,9 @@ public class AdminAppController implements Initializable {
     @FXML
     private Tab tabClientes;
     @FXML
-    private Tab tabPedidos;
-    @FXML
-    private Tab tabCategorias;
-    @FXML
     private Tab tabProdutos;
+    @FXML
+    private Tab tabSair;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -29,11 +27,11 @@ public class AdminAppController implements Initializable {
             Parent pedidoContent = FXMLLoader.load(getClass().getResource("/view/PedidosCadastrados.fxml"));
             tabPedidos.setContent(pedidoContent);
 
-            Parent categoriaContent = FXMLLoader.load(getClass().getResource("/view/CategoriasCadastradas.fxml"));
-            tabCategorias.setContent(categoriaContent);
-
             Parent produtoContent = FXMLLoader.load(getClass().getResource("/view/ProdutosCadastrados.fxml"));
             tabProdutos.setContent(produtoContent);
+
+            Parent sairContent = FXMLLoader.load(getClass().getResource("/view/Sair.fxml"));
+            tabSair.setContent(sairContent);
 
         } catch (Exception e) {
             e.printStackTrace();

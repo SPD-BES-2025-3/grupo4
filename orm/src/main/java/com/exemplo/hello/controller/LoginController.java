@@ -35,8 +35,8 @@ public class LoginController {
         mensagemLabel.setText("");
 
         try {
-            Dao<Cliente, Integer> clienteDao = DaoManager.createDao(database.getConnection(), Cliente.class);
-            Cliente cliente = clienteDao.queryBuilder()
+            Dao<ClienteCRM, Integer> clienteDao = DaoManager.createDao(database.getConnection(), ClienteCRM.class);
+            ClienteCRM cliente = clienteDao.queryBuilder()
                     .where().eq("email", email).and().eq("senha", senha)
                     .queryForFirst();
 

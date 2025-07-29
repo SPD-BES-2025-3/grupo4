@@ -16,10 +16,10 @@ public class ClienteAppController implements Initializable {
     @FXML
     private Tab tabProdutos;
     @FXML
-    private Tab tabCarrinhos;
-    @FXML
     private Tab tabPedidos;
-    
+    @FXML
+    private Tab tabSair;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -29,11 +29,11 @@ public class ClienteAppController implements Initializable {
             Parent produtoContent = FXMLLoader.load(getClass().getResource("/view/Produtos.fxml"));
             tabProdutos.setContent(produtoContent);
 
-            Parent carrinhoContent = FXMLLoader.load(getClass().getResource("/view/Carrinhos.fxml"));
-            tabCarrinhos.setContent(carrinhoContent);
-
             Parent pedidoContent = FXMLLoader.load(getClass().getResource("/view/Pedidos.fxml"));
             tabPedidos.setContent(pedidoContent);
+
+            Parent sairContent = FXMLLoader.load(getClass().getResource("/view/Sair.fxml"));
+            tabSair.setContent(sairContent);
 
         } catch (Exception e) {
             System.out.println("Erro ao carregar abas:");

@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-import com.exemplo.hello.model.Cliente;
+import com.exemplo.hello.model.ClienteCRM;
 import com.exemplo.hello.model.Endereco;
 import com.exemplo.hello.model.Database;
 import com.j256.ormlite.dao.Dao;
@@ -39,14 +39,14 @@ public class CadastroClienteController implements Initializable {
     @FXML private Button cancelarButton;
 
     private Database database;
-    private Dao<Cliente, Integer> clienteDao;
+    private Dao<ClienteCRM, Integer> clienteDao;
     private Dao<Endereco, Integer> enderecoDao;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             database = new Database("projetospd");
-            clienteDao = DaoManager.createDao(database.getConnection(), Cliente.class);
+            clienteDao = DaoManager.createDao(database.getConnection(), ClienteCRM.class);
             enderecoDao = DaoManager.createDao(database.getConnection(), Endereco.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,7 +66,7 @@ public class CadastroClienteController implements Initializable {
 
             enderecoDao.create(endereco);
 
-            Cliente cliente = new Cliente();
+            ClienteCRM cliente = new ClienteCRM();
             cliente.setNome(nomeField.getText());
             cliente.setEmail(emailField.getText());
             cliente.setSenha(senhaField.getText());

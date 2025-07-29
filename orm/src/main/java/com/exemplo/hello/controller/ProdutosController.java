@@ -7,13 +7,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import com.exemplo.hello.model.Repositorio; 
 import com.exemplo.hello.model.Repositorios; 
 import com.exemplo.hello.view.ProdutosView;
-import com.exemplo.hello.model.Produto;
-import com.exemplo.hello.model.Categoria;
+import com.exemplo.hello.model.ProdutoCRM;
+import com.exemplo.hello.model.ClienteCRM;
+import com.exemplo.hello.model.Sessao;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ProdutosController extends AbstractCrudController<Produto, ProdutosView, Integer> implements Initializable {
+public class ProdutosController extends AbstractCrudController<ProdutoCRM, ProdutosView, Integer> implements Initializable {
 
     @FXML
     private TableView<ProdutosView> tabelaProdutos;
@@ -28,8 +29,6 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
     private TableColumn<ProdutosView, Double> precoCol;
     @FXML
     private TableColumn<ProdutosView, Integer> estoqueCol;
-    @FXML
-    private TableColumn<ProdutosView, Integer> categoriaCol;
 
     @FXML
     private TextField idField;
@@ -41,8 +40,6 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
     private TextField precoField;
     @FXML
     private TextField estoqueField;
-    @FXML
-    private TextField categoriaField;
 
     @FXML
     private Button adicionarButton;
@@ -55,8 +52,8 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
     @FXML
     private Button salvarButton;
 
-    private static final Repositorio<Produto, Integer> ProdutoRepo = Repositorios.PRODUTO;
-    private static final Repositorio<Categoria, Integer> CategoriaRepo = Repositorios.CATEGORIA;
+    private ClienteCRM cliente;
+    private static final Repositorio<ProdutoCRM, Integer> ProdutoRepo = Repositorios.PRODUTOCRM;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,39 +62,32 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
         descricaoCol.setCellValueFactory(new PropertyValueFactory<>("descricao"));
         precoCol.setCellValueFactory(new PropertyValueFactory<>("preco"));
         estoqueCol.setCellValueFactory(new PropertyValueFactory<>("estoque"));
-        categoriaCol.setCellValueFactory(new PropertyValueFactory<>("categoria"));
         super.initialize();
     }
 
     @Override
-    protected Repositorio<Produto, Integer> getRepositorio() {
+    protected Repositorio<ProdutoCRM, Integer> getRepositorio() {
         return ProdutoRepo;
     }
 
     @Override
-    protected ProdutosView modelToView(Produto c) {
+    protected ProdutosView modelToView(ProdutoCRM c) {
         return new ProdutosView(
             c.getId(),
             c.getNome(),
             c.getDescricao(),
             c.getPreco(),
             c.getEstoque(),
-            c.getCategoria() != null ? c.getCategoria().getId() : null
         );
     }
 
     @Override
-    protected Produto viewToModel() {
-        Produto c = new Produto();
+    protected ProdutoCRM viewToModel() {
+        ProdutoCRM c = new Produto();
         c.setNome(nomeField.getText());
         c.setDescricao(descricaoField.getText());
         c.setPreco(Double.parseDouble(precoField.getText()));
         c.setEstoque(Integer.parseInt(estoqueField.getText()));
-
-        // Busca a categoria pelo ID digitado
-        int categoriaId = Integer.parseInt(categoriaField.getText());
-        Categoria categoria = CategoriaRepo.loadFromId(categoriaId);
-        c.setCategoria(categoria);
 
         return c;
     }
@@ -109,7 +99,6 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
         descricaoField.setText(produto.getDescricao());
         precoField.setText(String.valueOf(produto.getPreco()));
         estoqueField.setText(String.valueOf(produto.getEstoque()));
-        categoriaField.setText(String.valueOf(produto.getCategoria()));
     }
 
     @Override
@@ -119,7 +108,6 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
         descricaoField.clear();
         precoField.clear();
         estoqueField.clear();
-        categoriaField.clear();
     }
 
     @Override
@@ -128,7 +116,6 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
         descricaoField.setDisable(desabilitado);
         precoField.setDisable(desabilitado);
         estoqueField.setDisable(desabilitado);
-        categoriaField.setDisable(desabilitado);
     }
 
     @Override
@@ -151,7 +138,7 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
     }
 
     @Override
-    protected void setIdOnEntity(Produto entidade, Integer id) {
+    protected void setIdOnEntity(ProdutoCRM entidade, Integer id) {
         entidade.setId(id);
     }
 
@@ -162,24 +149,45 @@ public class ProdutosController extends AbstractCrudController<Produto, Produtos
     }
 
     @FXML
+    public void onAdicionarAoCarrinho(){
+        ProdutosView selecionado = tabelaProdutos.getSelectionModel().getSelectedItem();
+        cliente = Sessao.getCliente();
+        RedisPublisher publisher = new RedisPublisher();
+        try {
+            String canal = "carrinho:" + cliente.getId();
+            publisher.publicarProdutoParaCarrinho(selecionado, canal);
+            System.out.println("Produto enviado para o Redis (canal: " + canal + ")");
+        } finally {
+            publisher.fechar();
+        }
+    }
+
+    @FXML
     public void onSalvar() {
         System.out.println("Salvando produto:");
         System.out.println("Nome: " + nomeField.getText());
         System.out.println("Descrição: " + descricaoField.getText());
         System.out.println("Preço: " + precoField.getText());
         System.out.println("Estoque: " + estoqueField.getText());
-        System.out.println("Categoria: " + categoriaField.getText());
         super.onSalvar();
+
+        ProdutoCRM produto = viewToModel();
+        String acao = (produto.getId() == null || produto.getId() == 0) ? "criado" : "atualizado";
+        ProdutoEventPublisher.publicarEvento(acao, produto);
     }
 
     @FXML
     public void onAtualizar() {
+        ProdutoCRM produto = viewToModel();
         super.onAtualizar();
+        ProdutoEventPublisher.publicarEvento("atualizado", produto);
     }
 
     @FXML
     public void onDeletar() {
+        ProdutoCRM produto = viewToModel();
         super.onDeletar();
+        ProdutoEventPublisher.publicarEvento("removido", produto);
     }
 
     @FXML

@@ -9,15 +9,13 @@ public class ProdutosView {
     private final SimpleStringProperty descricao;
     private final SimpleDoubleProperty preco;
     private final SimpleIntegerProperty estoque;
-    private final SimpleIntegerProperty categoria;
 
-    public ProdutosView(int id, String nome, String descricao, double preco, int estoque, Integer categoria) {
+    public ProdutosView(int id, String nome, String descricao, double preco, int estoque) {
         this.id = new SimpleIntegerProperty(id);
         this.nome = new SimpleStringProperty(nome);
         this.descricao = new SimpleStringProperty(descricao);
         this.preco = new SimpleDoubleProperty(preco);
         this.estoque = new SimpleIntegerProperty(estoque);
-        this.categoria = new SimpleIntegerProperty(categoria != null ? categoria : 0);
     }
 
 
@@ -40,8 +38,4 @@ public class ProdutosView {
     public int getEstoque() { return estoque.get(); }
     public void setEstoque(int estoque) { this.estoque.set(estoque); }
     public IntegerProperty estoqueProperty() { return estoque; }
-
-    public int getCategoria() { return categoria.get(); }
-    public void setCategoria(int categoria) { this.categoria.set(categoria); }
-    public IntegerProperty categoriaProperty() { return categoria; }
 }

@@ -11,7 +11,7 @@ public class ClienteAppView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ClienteApp.fxml")); // este é o arquivo FXML principal
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ClienteApp.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);

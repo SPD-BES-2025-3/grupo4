@@ -48,10 +48,8 @@
                         <Label layoutX="50.0" layoutY="230.0" text="Estoque" />
                         <TextField fx:id="estoqueField" disable="true" editable="false" layoutX="180.0" layoutY="225.0" />
 
-                        <Label layoutX="50.0" layoutY="270.0" text="Categoria (ID)" />
-                        <TextField fx:id="categoriaField" disable="true" editable="false" layoutX="180.0" layoutY="265.0" />
-
-                        <Button fx:id="adicionarButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionar" text="Adicionar" />
+                        <Button fx:id="adicionarButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionar" visible="false" text="Adicionar" />
+                        <Button fx:id="adicionarAoCarrinhoButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionarAoCarrinho" text="Adicionar" />
                         <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" textFill="#9a9a9a" />
                         <Button fx:id="deletarButton" disable="true" layoutX="230.0" layoutY="310.0" mnemonicParsing="false" onAction="#onDeletar" text="Deletar" textFill="#9a9a9a" />
                         <Button fx:id="cancelarButton" disable="true" layoutX="320.0" layoutY="310.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" textFill="#9a9a9a" />
@@ -71,7 +69,6 @@
                         <TableColumn fx:id="descricaoCol" prefWidth="200.0" text="Descrição" />
                         <TableColumn fx:id="precoCol" prefWidth="100.0" text="Preço" />
                         <TableColumn fx:id="estoqueCol" prefWidth="100.0" text="Estoque" />
-                        <TableColumn fx:id="categoriaCol" prefWidth="150.0" text="Categoria" />
                      </columns>
                   </TableView>
                </children>

@@ -7,12 +7,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import com.exemplo.hello.model.Repositorio; 
 import com.exemplo.hello.model.Repositorios; 
 import com.exemplo.hello.view.ClientesView;
-import com.exemplo.hello.model.Cliente;
+import com.exemplo.hello.model.ClienteCRM;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClientesController extends AbstractCrudController<Cliente, ClientesView, Integer> implements Initializable {
+public class ClientesController extends AbstractCrudController<ClienteCRM, ClientesView, Integer> implements Initializable {
 
     @FXML
     private TableView<ClientesView> tabelaClientes;
@@ -46,7 +46,7 @@ public class ClientesController extends AbstractCrudController<Cliente, Clientes
     @FXML
     private Button salvarButton;
 
-    private static final Repositorio<Cliente, Integer> clienteRepo = Repositorios.CLIENTE;
+    private static final Repositorio<ClienteCRM, Integer> clienteRepo = Repositorios.CLIENTECRM;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,18 +58,18 @@ public class ClientesController extends AbstractCrudController<Cliente, Clientes
     }
 
     @Override
-    protected Repositorio<Cliente, Integer> getRepositorio() {
+    protected Repositorio<ClienteCRM, Integer> getRepositorio() {
         return clienteRepo;
     }
 
     @Override
-    protected ClientesView modelToView(Cliente c) {
+    protected ClientesView modelToView(ClienteCRM c) {
         return new ClientesView(c.getId(), c.getNome(), c.getEmail(), c.getNumeroTelefone());
     }
 
     @Override
-    protected Cliente viewToModel() {
-        Cliente c = new Cliente();
+    protected ClienteCRM viewToModel() {
+        ClienteCRM c = new ClienteCRM();
         c.setNome(nomeField.getText());
         c.setEmail(emailField.getText());
         c.setNumeroTelefone(telefoneField.getText());
@@ -119,7 +119,7 @@ public class ClientesController extends AbstractCrudController<Cliente, Clientes
     }
 
     @Override
-    protected void setIdOnEntity(Cliente entidade, Integer id) {
+    protected void setIdOnEntity(ClienteCRM entidade, Integer id) {
         entidade.setId(id);
     }
 

@@ -3,8 +3,8 @@ package com.exemplo.hello.model;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.field.DatabaseField;
 
-@DatabaseTable(tableName = "cliente")
-public class Cliente {
+@DatabaseTable(tableName = "cliente_crm")
+public class ClienteCRM {
 
     @DatabaseField(generatedId = true)
     private int id;

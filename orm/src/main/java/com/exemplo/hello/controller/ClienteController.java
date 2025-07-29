@@ -5,7 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import com.exemplo.hello.model.Cliente;
+import com.exemplo.hello.model.ClienteCRM;
 import com.exemplo.hello.model.Sessao;
 import com.exemplo.hello.model.Repositorios;
 
@@ -22,7 +22,7 @@ public class ClienteController implements Initializable {
     @FXML private Button salvarButton;
     @FXML private Button cancelarButton;
 
-    private Cliente cliente;
+    private ClienteCRM cliente;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -34,7 +34,7 @@ public class ClienteController implements Initializable {
         }
     }
 
-    private void preencherCampos(Cliente c) {
+    private void preencherCampos(ClienteCRM c) {
         nomeField.setText(c.getNome());
         emailField.setText(c.getEmail());
         telefoneField.setText(c.getNumeroTelefone());
@@ -60,7 +60,7 @@ public class ClienteController implements Initializable {
             cliente.setNome(nomeField.getText());
             cliente.setEmail(emailField.getText());
 
-            Repositorios.CLIENTE.update(cliente);
+            Repositorios.CLIENTECRM.update(cliente);
 
             desabilitarCampos(true);
             salvarButton.setDisable(true);
