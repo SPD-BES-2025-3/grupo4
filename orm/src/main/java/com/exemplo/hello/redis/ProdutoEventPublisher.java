@@ -1,3 +1,6 @@
+package com.exemplo.hello.redis;
+
+import com.exemplo.hello.model.ProdutoCRM;
 import com.google.gson.Gson;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.sync.RedisCommands;

@@ -41,10 +41,10 @@
                         <TextField fx:id="telefoneField" layoutX="180.0" layoutY="185.0" disable="true" />
 
                         <Button fx:id="adicionarButton" layoutX="50.0" layoutY="240.0" mnemonicParsing="false" onAction="#onAdicionar" visible="false"  text="Adicionar" />
-                        <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="240.0" mnemonicParsing="false" onAction="#onAtualizar" visible="false" text="Atualizar" />
-                        <Button fx:id="deletarButton" disable="true" layoutX="230.0" layoutY="240.0" mnemonicParsing="false" onAction="#onDeletar" text="Deletar" />
-                        <Button fx:id="cancelarButton" disable="true" layoutX="320.0" layoutY="240.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
-                        <Button fx:id="salvarButton" disable="true" layoutX="410.0" layoutY="240.0" mnemonicParsing="false" onAction="#onSalvar" visible="false" text="Salvar" />
+                        <Button fx:id="atualizarButton" disable="true" layoutX="50.0" layoutY="240.0" mnemonicParsing="false" onAction="#onAtualizar" visible="false" text="Atualizar" />
+                        <Button fx:id="deletarButton" disable="true" layoutX="140.0" layoutY="240.0" mnemonicParsing="false" onAction="#onDeletar" visible="false" text="Deletar" />
+                        <Button fx:id="cancelarButton" disable="true" layoutX="230.0" layoutY="240.0" mnemonicParsing="false" onAction="#onCancelar" visible="false" text="Cancelar" />
+                        <Button fx:id="salvarButton" disable="true" layoutX="320.0" layoutY="240.0" mnemonicParsing="false" onAction="#onSalvar" visible="false" text="Salvar" />
                      </children>
                   </Pane>
                </children>

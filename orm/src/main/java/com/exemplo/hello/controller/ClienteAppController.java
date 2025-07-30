@@ -16,7 +16,7 @@ public class ClienteAppController implements Initializable {
     @FXML
     private Tab tabProdutos;
     @FXML
-    private Tab tabPedidos;
+    private Tab tabCarrinho;
     @FXML
     private Tab tabSair;
 
@@ -29,8 +29,8 @@ public class ClienteAppController implements Initializable {
             Parent produtoContent = FXMLLoader.load(getClass().getResource("/view/Produtos.fxml"));
             tabProdutos.setContent(produtoContent);
 
-            Parent pedidoContent = FXMLLoader.load(getClass().getResource("/view/Pedidos.fxml"));
-            tabPedidos.setContent(pedidoContent);
+            Parent carrinhoContent = FXMLLoader.load(getClass().getResource("/view/Carrinho.fxml"));
+            tabCarrinho.setContent(carrinhoContent);
 
             Parent sairContent = FXMLLoader.load(getClass().getResource("/view/Sair.fxml"));
             tabSair.setContent(sairContent);

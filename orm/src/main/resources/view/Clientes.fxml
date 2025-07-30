@@ -22,7 +22,7 @@
                <children>
                   <Pane prefHeight="320.0" prefWidth="800.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
                      <children>
-                        <Label layoutX="50.0" layoutY="20.0" text="Gerenciar Clientes">
+                        <Label layoutX="50.0" layoutY="20.0" text="Meu usuário">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -40,9 +40,9 @@
                         <Label layoutX="50.0" layoutY="190.0" text="Telefone" />
                         <TextField fx:id="telefoneField" layoutX="180.0" layoutY="185.0" />
 
-                        <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="240.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" />
-                        <Button fx:id="cancelarButton" disable="true" layoutX="230.0" layoutY="240.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
-                        <Button fx:id="salvarButton" disable="true" layoutX="320.0" layoutY="240.0" mnemonicParsing="false" onAction="#onSalvar" text="Salvar" />
+                        <Button fx:id="atualizarButton" disable="true" layoutX="50.0" layoutY="240.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" />
+                        <Button fx:id="cancelarButton" disable="true" layoutX="140.0" layoutY="240.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
+                        <Button fx:id="salvarButton" disable="true" layoutX="230.0" layoutY="240.0" mnemonicParsing="false" onAction="#onSalvar" text="Salvar" />
                      </children>
                   </Pane>
                </children>

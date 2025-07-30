@@ -1,13 +1,13 @@
 package com.exemplo.hello.model;
 
 public class Sessao {
-    private static Cliente clienteLogado;
+    private static ClienteCRM clienteLogado;
 
-    public static void setCliente(Cliente cliente) {
+    public static void setCliente(ClienteCRM cliente) {
         clienteLogado = cliente;
     }
 
-    public static Cliente getCliente() {
+    public static ClienteCRM getCliente() {
         return clienteLogado;
     }
 }

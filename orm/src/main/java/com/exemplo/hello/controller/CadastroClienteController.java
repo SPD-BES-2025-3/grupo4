@@ -13,6 +13,10 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
+import com.google.gson.Gson;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.sync.RedisCommands;
+
 import com.exemplo.hello.model.ClienteCRM;
 import com.exemplo.hello.model.Endereco;
 import com.exemplo.hello.model.Database;
@@ -74,6 +78,14 @@ public class CadastroClienteController implements Initializable {
             cliente.setEndereco(endereco);
 
             clienteDao.create(cliente);
+
+            Gson gson = new Gson();
+            String clienteJson = gson.toJson(cliente);
+
+            RedisClient redisClient = RedisClient.create("redis://localhost:6379");
+            RedisCommands<String, String> syncCommands = redisClient.connect().sync();
+            syncCommands.publish("canal-clientes", clienteJson);
+            redisClient.shutdown();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");

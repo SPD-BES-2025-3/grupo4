@@ -10,22 +10,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.exemplo.hello.controller.ProdutosController">
+<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.hello.controller.ProdutosController">
 
    <children>
-      <SplitPane dividerPositions="0.4" orientation="VERTICAL" 
-                 AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" 
-                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <SplitPane dividerPositions="0.4" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
          <items>
             <AnchorPane>
                <children>
-                  <Pane prefHeight="320.0" prefWidth="800.0" 
-                        AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" 
-                        AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                  <Pane prefHeight="320.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutX="50.0" layoutY="20.0" text="Gerenciar Produtos">
                            <font>
@@ -48,12 +41,15 @@
                         <Label layoutX="50.0" layoutY="230.0" text="Estoque" />
                         <TextField fx:id="estoqueField" layoutX="180.0" layoutY="225.0" />
 
-                        <Button fx:id="adicionarButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionar" text="Adicionar" />
-                        <Button fx:id="adicionarAoCarrinhoButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionarAoCarrinho" visible="false" text="Adicionar" />
-                        <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" />
-                        <Button fx:id="deletarButton" disable="true" layoutX="230.0" layoutY="310.0" mnemonicParsing="false" onAction="#onDeletar" text="Deletar" />
-                        <Button fx:id="cancelarButton" disable="true" layoutX="320.0" layoutY="310.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
-                        <Button fx:id="salvarButton" disable="true" layoutX="410.0" layoutY="310.0" mnemonicParsing="false" onAction="#onSalvar" text="Salvar" />
+                        <Label layoutX="50.0" layoutY="270.0" managed="false" text="Quantidade" visible="false" />
+                        <TextField fx:id="quantidadeField" layoutX="180.0" layoutY="265.0" managed="false" visible="false" />
+
+                        <Button fx:id="adicionarButton" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#onAdicionar" text="Adicionar" />
+                        <Button fx:id="adicionarAoCarrinhoButton" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#onAdicionarAoCarrinho" text="Adicionar" visible="false" />
+                        <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="280.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" />
+                        <Button fx:id="deletarButton" disable="true" layoutX="230.0" layoutY="280.0" mnemonicParsing="false" onAction="#onDeletar" text="Deletar" />
+                        <Button fx:id="cancelarButton" disable="true" layoutX="320.0" layoutY="280.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" />
+                        <Button fx:id="salvarButton" disable="true" layoutX="410.0" layoutY="280.0" mnemonicParsing="false" onAction="#onSalvar" text="Salvar" />
                      </children>
                   </Pane>
                </children>
@@ -61,8 +57,7 @@
 
             <AnchorPane>
                <children>
-                  <TableView fx:id="tabelaProdutos" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" 
-                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <TableView fx:id="tabelaProdutos" layoutY="61.0" prefHeight="355.0" prefWidth="898.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
                         <TableColumn fx:id="nomeCol" prefWidth="200.0" text="Nome" />

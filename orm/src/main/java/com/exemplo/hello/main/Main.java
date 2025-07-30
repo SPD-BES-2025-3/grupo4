@@ -1,14 +1,9 @@
 package com.exemplo.hello.main;
 
+import com.exemplo.hello.model.*;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-
-import com.exemplo.hello.model.Endereco;
-import com.exemplo.hello.model.ProdutoCRM;
-import com.exemplo.hello.model.ClienteCRM;
-import com.exemplo.hello.model.Administrador;
-import com.exemplo.hello.model.PedidoCRM;
 
 public class Main {
 

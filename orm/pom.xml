@@ -97,19 +97,19 @@
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.46.0.0</version>
     </dependency>
-  </dependencies>
 
-  <!-- Redis -->
-  <dependency>
+    <!-- Redis -->
+    <dependency>
       <groupId>io.lettuce</groupId>
       <artifactId>lettuce-core</artifactId>
       <version>6.3.0.RELEASE</version>
-  </dependency>
-  <dependency>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10</version>
-  </dependency>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>

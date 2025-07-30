@@ -23,12 +23,6 @@ public class PedidoCRM {
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private ClienteCRM cliente;
 
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
-    private Pagamento pagamento;
-
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
-    private Envio envio;
-
     // Getters e Setters
 
     public int getId() {
@@ -63,27 +57,11 @@ public class PedidoCRM {
         this.total = total;
     }
 
-    public Cliente getCliente() {
+    public ClienteCRM getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(ClienteCRM cliente) {
         this.cliente = cliente;
-    }
-
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
-    public Envio getEnvio() {
-        return envio;
-    }
-
-    public void setEnvio(Envio envio) {
-        this.envio = envio;
     }
 }

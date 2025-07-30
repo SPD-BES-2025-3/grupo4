@@ -1,41 +1,59 @@
 package com.exemplo.hello.view;
 
-import javafx.beans.property.*;
-
 public class ProdutosView {
+    private Integer id;
+    private String nome;
+    private String descricao;
+    private Double preco;
+    private Integer estoque;
 
-    private final SimpleIntegerProperty id;
-    private final SimpleStringProperty nome;
-    private final SimpleStringProperty descricao;
-    private final SimpleDoubleProperty preco;
-    private final SimpleIntegerProperty estoque;
-
-    public ProdutosView(int id, String nome, String descricao, double preco, int estoque) {
-        this.id = new SimpleIntegerProperty(id);
-        this.nome = new SimpleStringProperty(nome);
-        this.descricao = new SimpleStringProperty(descricao);
-        this.preco = new SimpleDoubleProperty(preco);
-        this.estoque = new SimpleIntegerProperty(estoque);
+    public ProdutosView(Integer id, String nome, String descricao, Double preco, Integer estoque) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.estoque = estoque;
     }
 
+    // Getters e setters
 
-    public int getId() { return id.get(); }
-    public void setId(int id) { this.id.set(id); }
-    public IntegerProperty idProperty() { return id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public String getNome() { return nome.get(); }
-    public void setNome(String nome) { this.nome.set(nome); }
-    public StringProperty nomeProperty() { return nome; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public String getDescricao() { return descricao.get(); }
-    public void setDescricao(String descricao) { this.descricao.set(descricao); }
-    public StringProperty descricaoProperty() { return descricao; }
+    public String getNome() {
+        return nome;
+    }
 
-    public double getPreco() { return preco.get(); }
-    public void setPreco(double preco) { this.preco.set(preco); }
-    public DoubleProperty precoProperty() { return preco; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public int getEstoque() { return estoque.get(); }
-    public void setEstoque(int estoque) { this.estoque.set(estoque); }
-    public IntegerProperty estoqueProperty() { return estoque; }
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(Double preco) {
+        this.preco = preco;
+    }
+
+    public Integer getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(Integer estoque) {
+        this.estoque = estoque;
+    }
 }

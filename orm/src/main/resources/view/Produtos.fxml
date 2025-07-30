@@ -48,12 +48,15 @@
                         <Label layoutX="50.0" layoutY="230.0" text="Estoque" />
                         <TextField fx:id="estoqueField" disable="true" editable="false" layoutX="180.0" layoutY="225.0" />
 
+                        <Label layoutX="50.0" layoutY="270.0" text="Quantidade" />
+                        <TextField fx:id="quantidadeField" layoutX="180.0" layoutY="265.0" />
+
                         <Button fx:id="adicionarButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionar" visible="false" text="Adicionar" />
-                        <Button fx:id="adicionarAoCarrinhoButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionarAoCarrinho" text="Adicionar" />
-                        <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" textFill="#9a9a9a" />
-                        <Button fx:id="deletarButton" disable="true" layoutX="230.0" layoutY="310.0" mnemonicParsing="false" onAction="#onDeletar" text="Deletar" textFill="#9a9a9a" />
-                        <Button fx:id="cancelarButton" disable="true" layoutX="320.0" layoutY="310.0" mnemonicParsing="false" onAction="#onCancelar" text="Cancelar" textFill="#9a9a9a" />
-                        <Button fx:id="salvarButton" disable="true" layoutX="410.0" layoutY="310.0" mnemonicParsing="false" onAction="#onSalvar" text="Salvar" textFill="#9a9a9a" />
+                        <Button fx:id="adicionarAoCarrinhoButton" layoutX="50.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAdicionarAoCarrinho" text="Adicionar ao carrinho" />
+                        <Button fx:id="atualizarButton" disable="true" layoutX="140.0" layoutY="310.0" mnemonicParsing="false" onAction="#onAtualizar" visible="false" text="Atualizar" textFill="#9a9a9a" />
+                        <Button fx:id="deletarButton" disable="true" layoutX="230.0" layoutY="310.0" mnemonicParsing="false" onAction="#onDeletar" visible="false" text="Deletar" textFill="#9a9a9a" />
+                        <Button fx:id="cancelarButton" disable="true" layoutX="320.0" layoutY="310.0" mnemonicParsing="false" onAction="#onCancelar" visible="false" text="Cancelar" textFill="#9a9a9a" />
+                        <Button fx:id="salvarButton" disable="true" layoutX="410.0" layoutY="310.0" mnemonicParsing="false" onAction="#onSalvar" visible="false" text="Salvar" textFill="#9a9a9a" />
                      </children>
                   </Pane>
                </children>

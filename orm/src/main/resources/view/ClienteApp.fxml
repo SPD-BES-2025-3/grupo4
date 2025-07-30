@@ -35,7 +35,6 @@
                 <Tab fx:id="tabClientes" closable="false" text="Cliente" />
                 <Tab fx:id="tabProdutos" text="Produtos" />
                 <Tab fx:id="tabCarrinho" text="Carrinho" />
-                <Tab fx:id="tabPedidos" text="Pedidos" />
                 <Tab fx:id="tabSair" text="Sair" />
               </tabs>
             </TabPane>

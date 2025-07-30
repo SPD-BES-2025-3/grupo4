@@ -32,7 +32,6 @@
             <TabPane layoutX="63.0" layoutY="68.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
                 <Tab fx:id="tabClientes" closable="false" text="Clientes" />
-                <Tab fx:id="tabPedidos" text="Pedidos" />
                 <Tab fx:id="tabProdutos" text="Produtos" />
                 <Tab fx:id="tabSair" text="Sair" />
               </tabs>

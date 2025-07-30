@@ -9,6 +9,9 @@ import com.exemplo.hello.model.ClienteCRM;
 import com.exemplo.hello.model.Sessao;
 import com.exemplo.hello.model.Repositorios;
 
+import com.google.gson.Gson;
+import com.exemplo.hello.redis.RedisPublisher;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -61,6 +64,12 @@ public class ClienteController implements Initializable {
             cliente.setEmail(emailField.getText());
 
             Repositorios.CLIENTECRM.update(cliente);
+
+            Gson gson = new Gson();
+            String clienteJson = gson.toJson(cliente);
+
+            RedisPublisher publisher = RedisPublisher.getInstancia();
+            publisher.publicar("canal-clientes", clienteJson);
 
             desabilitarCampos(true);
             salvarButton.setDisable(true);

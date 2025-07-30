@@ -24,9 +24,6 @@ public class AdminAppController implements Initializable {
             Parent clienteContent = FXMLLoader.load(getClass().getResource("/view/ClientesCadastrados.fxml"));
             tabClientes.setContent(clienteContent);
 
-            Parent pedidoContent = FXMLLoader.load(getClass().getResource("/view/PedidosCadastrados.fxml"));
-            tabPedidos.setContent(pedidoContent);
-
             Parent produtoContent = FXMLLoader.load(getClass().getResource("/view/ProdutosCadastrados.fxml"));
             tabProdutos.setContent(produtoContent);
 

@@ -1,15 +1,18 @@
 package com.exemplo.hello.controller;
 
+import com.exemplo.hello.view.ProdutosView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import com.exemplo.hello.model.Repositorio; 
-import com.exemplo.hello.model.Repositorios; 
-import com.exemplo.hello.view.ProdutosView;
+import com.exemplo.hello.model.Repositorios;
 import com.exemplo.hello.model.ProdutoCRM;
 import com.exemplo.hello.model.ClienteCRM;
 import com.exemplo.hello.model.Sessao;
+
+import com.exemplo.hello.redis.RedisPublisher;
+import com.exemplo.hello.redis.ProdutoEventPublisher;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +21,9 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
 
     @FXML
     private TableView<ProdutosView> tabelaProdutos;
+
+    @FXML
+    private TextField quantidadeField;
 
     @FXML
     private TableColumn<ProdutosView, Integer> idCol;
@@ -77,13 +83,13 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
             c.getNome(),
             c.getDescricao(),
             c.getPreco(),
-            c.getEstoque(),
+            c.getEstoque()
         );
     }
 
     @Override
     protected ProdutoCRM viewToModel() {
-        ProdutoCRM c = new Produto();
+        ProdutoCRM c = new ProdutoCRM();
         c.setNome(nomeField.getText());
         c.setDescricao(descricaoField.getText());
         c.setPreco(Double.parseDouble(precoField.getText()));
@@ -149,18 +155,42 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
     }
 
     @FXML
-    public void onAdicionarAoCarrinho(){
+    public void onAdicionarAoCarrinho() {
         ProdutosView selecionado = tabelaProdutos.getSelectionModel().getSelectedItem();
+        if (selecionado == null) {
+            System.out.println("Nenhum produto selecionado para adicionar ao carrinho.");
+            return;
+        }
+
+        int quantidade = 1;
+        try {
+            quantidade = Integer.parseInt(quantidadeField.getText());
+            if (quantidade <= 0) {
+                System.out.println("Quantidade invalida. Deve ser maior que zero.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Quantidade invalida. Informe um numero inteiro.");
+            return;
+        }
+
+        ProdutoCRM produto = ProdutoRepo.loadFromId(selecionado.getId());
+
+        CarrinhoController carrinhoController = CarrinhoController.getInstancia();
+        carrinhoController.adicionarProduto(produto, quantidade);
+
+        System.out.println("Produto adicionado ao carrinho (local), quantidade: " + quantidade);
         cliente = Sessao.getCliente();
         RedisPublisher publisher = new RedisPublisher();
         try {
             String canal = "carrinho:" + cliente.getId();
-            publisher.publicarProdutoParaCarrinho(selecionado, canal);
-            System.out.println("Produto enviado para o Redis (canal: " + canal + ")");
+            publisher.publicarProdutoParaCarrinho(selecionado, quantidade, canal);
+            System.out.println("Produto enviado para o Redis (canal: " + canal + "), quantidade: " + quantidade);
         } finally {
             publisher.fechar();
         }
     }
+
 
     @FXML
     public void onSalvar() {
@@ -172,7 +202,7 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
         super.onSalvar();
 
         ProdutoCRM produto = viewToModel();
-        String acao = (produto.getId() == null || produto.getId() == 0) ? "criado" : "atualizado";
+        String acao = (produto.getId() == 0) ? "criado" : "atualizado";
         ProdutoEventPublisher.publicarEvento(acao, produto);
     }
 
