@@ -135,9 +135,7 @@ public class ProdutoEventPublisherTest {
             ProdutoEventPublisher.fechar();
             ProdutoEventPublisher.fechar();
             ProdutoEventPublisher.fechar();
-            // Se chegou aqui, não houve exceção
         } catch (Exception e) {
-            // Esperado se não houver Redis rodando
             assertTrue(e instanceof RuntimeException || e instanceof Exception);
         }
     }

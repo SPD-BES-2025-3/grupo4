@@ -17,7 +17,7 @@ public class Database {
         }
         if (connection == null) {
             try {
-                String url = "jdbc:postgresql://localhost:5432/" + databaseName;
+                String url = "jdbc:postgresql://localhost:5433/" + databaseName;
                 String user = "postgres";
                 String password = "123456";
                 connection = new JdbcConnectionSource(url, user, password);
