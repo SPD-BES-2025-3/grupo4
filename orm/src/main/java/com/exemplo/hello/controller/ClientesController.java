@@ -3,12 +3,15 @@ package com.exemplo.hello.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import com.exemplo.hello.model.Repositorio; 
 import com.exemplo.hello.model.Repositorios; 
 import com.exemplo.hello.view.ClientesView;
 import com.exemplo.hello.model.ClienteCRM;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 

@@ -10,6 +10,7 @@ public class ProdutoEventPublisher {
     private static final RedisCommands<String, String> commands = redisClient.connect().sync();
     private static final Gson gson = new Gson();
 
+
     public static void publicarEvento(String acao, ProdutoCRM produto) {
         EventoProduto evento = new EventoProduto(acao, produto);
         String json = gson.toJson(evento);
