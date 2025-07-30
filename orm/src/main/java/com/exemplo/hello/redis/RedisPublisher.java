@@ -1,8 +1,11 @@
 package com.exemplo.hello.redis;
 
 import com.google.gson.Gson;
+import com.exemplo.hello.model.CarrinhoItem;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.sync.RedisCommands;
+
+import java.util.List;
 
 public class RedisPublisher {
     private static RedisPublisher instancia;
@@ -22,27 +25,17 @@ public class RedisPublisher {
         return instancia;
     }
 
-    public void publicarProdutoParaCarrinho(Object produto, int quantidade, String canal) {
-        ProdutoComQuantidade pcq = new ProdutoComQuantidade(produto, quantidade);
-        String json = gson.toJson(pcq);
+    public void publicarCarrinhoFinalizado(List<CarrinhoItem> itens, int clienteId) {
+        String canal = "carrinho:" + clienteId;
+        String json = gson.toJson(itens);
         commands.publish(canal, json);
-    }
-
-    public void fechar() {
-        client.shutdown();
     }
 
     public static void publicar(String canal, String json) {
         getInstancia().commands.publish(canal, json);
     }
 
-    private static class ProdutoComQuantidade {
-        private final Object produto;
-        private final int quantidade;
-
-        public ProdutoComQuantidade(Object produto, int quantidade) {
-            this.produto = produto;
-            this.quantidade = quantidade;
-        }
+    public void fechar() {
+        client.shutdown();
     }
 }

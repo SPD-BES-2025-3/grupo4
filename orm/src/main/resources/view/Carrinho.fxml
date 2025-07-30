@@ -10,22 +10,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.exemplo.hello.controller.CarrinhoController">
+<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.exemplo.hello.controller.CarrinhoController">
 
     <children>
-        <SplitPane dividerPositions="0.4" orientation="VERTICAL"
-                   AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <SplitPane dividerPositions="0.4" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
             <items>
                 <AnchorPane>
                     <children>
-                        <Pane prefHeight="320.0" prefWidth="800.0"
-                              AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                        <Pane prefHeight="320.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
                                 <Label layoutX="50.0" layoutY="20.0" text="Produtos no carrinho">
                                     <font>
@@ -42,6 +35,7 @@
                                 <Button fx:id="atualizarBtn" disable="true" layoutX="50.0" layoutY="150.0" mnemonicParsing="false" onAction="#onAtualizar" text="Atualizar" />
                                 <Button fx:id="deletarBtn" disable="true" layoutX="140.0" layoutY="150.0" mnemonicParsing="false" onAction="#onDeletar" text="Deletar" />
                                 <Button fx:id="limparBtn" layoutX="230.0" layoutY="150.0" mnemonicParsing="false" onAction="#onLimpar" text="Limpar" />
+                                <Button fx:id="FinalizarBtn" layoutX="320.0" layoutY="150.0" mnemonicParsing="false" onAction="#onFinalizar" text="Finalizar" />
                             </children>
                         </Pane>
                     </children>
@@ -49,11 +43,13 @@
 
                 <AnchorPane>
                     <children>
-                        <TableView fx:id="tabelaCarrinhos" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <TableView fx:id="tabelaCarrinhos" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <columns>
-                                <TableColumn fx:id="idCol" prefWidth="100.0" text="Produto ID" />
-                                <TableColumn fx:id="totalCol" prefWidth="200.0" text="Subtotal" />
+                                <TableColumn fx:id="idCol" prefWidth="79.0" text="Produto ID" />
+                                <TableColumn fx:id="produtoCol" prefWidth="151.0" text="Produto" />
+                                <TableColumn fx:id="precoCol" prefWidth="144.0" text="Preço Unitário" />
+                                <TableColumn fx:id="quantidadeCol" prefWidth="180.0" text="Quantidade" />
+                                <TableColumn fx:id="totalCol" prefWidth="100.0" text="Total" />
                             </columns>
                         </TableView>
                     </children>

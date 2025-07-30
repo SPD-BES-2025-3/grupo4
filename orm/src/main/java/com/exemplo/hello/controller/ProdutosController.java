@@ -9,9 +9,7 @@ import com.exemplo.hello.model.Repositorio;
 import com.exemplo.hello.model.Repositorios;
 import com.exemplo.hello.model.ProdutoCRM;
 import com.exemplo.hello.model.ClienteCRM;
-import com.exemplo.hello.model.Sessao;
 
-import com.exemplo.hello.redis.RedisPublisher;
 import com.exemplo.hello.redis.ProdutoEventPublisher;
 
 import java.net.URL;
@@ -69,6 +67,12 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
         precoCol.setCellValueFactory(new PropertyValueFactory<>("preco"));
         estoqueCol.setCellValueFactory(new PropertyValueFactory<>("estoque"));
         super.initialize();
+
+        tabelaProdutos.getSelectionModel().selectedItemProperty().addListener((obs, antigo, novo) -> {
+            if (novo != null) {
+                quantidadeField.clear();
+            }
+        });
     }
 
     @Override
@@ -162,11 +166,15 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
             return;
         }
 
+        ProdutoCRM produto = ProdutoRepo.loadFromId(selecionado.getId());
         int quantidade = 1;
         try {
             quantidade = Integer.parseInt(quantidadeField.getText());
             if (quantidade <= 0) {
                 System.out.println("Quantidade invalida. Deve ser maior que zero.");
+                return;
+            } else if (quantidade > produto.getEstoque()){
+                System.out.println("Não há estoque para a quantidade informada do produto escolhido.");
                 return;
             }
         } catch (NumberFormatException e) {
@@ -174,21 +182,17 @@ public class ProdutosController extends AbstractCrudController<ProdutoCRM, Produ
             return;
         }
 
-        ProdutoCRM produto = ProdutoRepo.loadFromId(selecionado.getId());
 
         CarrinhoController carrinhoController = CarrinhoController.getInstancia();
         carrinhoController.adicionarProduto(produto, quantidade);
 
-        System.out.println("Produto adicionado ao carrinho (local), quantidade: " + quantidade);
-        cliente = Sessao.getCliente();
-        RedisPublisher publisher = new RedisPublisher();
-        try {
-            String canal = "carrinho:" + cliente.getId();
-            publisher.publicarProdutoParaCarrinho(selecionado, quantidade, canal);
-            System.out.println("Produto enviado para o Redis (canal: " + canal + "), quantidade: " + quantidade);
-        } finally {
-            publisher.fechar();
-        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sucesso");
+        alert.setHeaderText(null);
+        alert.setContentText("Produto adicionado ao carrinho com sucesso!");
+        alert.showAndWait();
+        System.out.println("Produto " + produto.getNome() + " adicionado ao carrinho (local), quantidade: " + quantidade);
+        quantidadeField.clear();
     }
 
 

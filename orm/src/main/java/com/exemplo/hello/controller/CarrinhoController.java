@@ -1,103 +1,143 @@
-    package com.exemplo.hello.controller;
+package com.exemplo.hello.controller;
 
-    import com.exemplo.hello.model.*;
-    import javafx.collections.FXCollections;
-    import javafx.collections.ObservableList;
-    import javafx.fxml.FXML;
-    import javafx.fxml.Initializable;
-    import javafx.scene.control.*;
+import com.exemplo.hello.model.*;
+import com.exemplo.hello.redis.RedisPublisher;
 
-    import java.net.URL;
-    import java.util.ResourceBundle;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 
-    public class CarrinhoController implements Initializable {
+import java.net.URL;
+import java.util.ResourceBundle;
 
-        @FXML private TableView<CarrinhoItem> tabelaCarrinhos;
-        @FXML private TableColumn<CarrinhoItem, String> idCol;
-        @FXML private TableColumn<CarrinhoItem, String> totalCol;
+public class CarrinhoController implements Initializable {
 
-        @FXML private TextField idField;
-        @FXML private TextField totalField;
+    @FXML private TableView<CarrinhoItem> tabelaCarrinhos;
+    @FXML private TableColumn<CarrinhoItem, Integer> idCol;
+    @FXML private TableColumn<CarrinhoItem, String> produtoCol;
+    @FXML private TableColumn<CarrinhoItem, Double> precoCol;
+    @FXML private TableColumn<CarrinhoItem, Integer> quantidadeCol;
+    @FXML private TableColumn<CarrinhoItem, Double> totalCol;
 
-        @FXML private Button adicionarBtn;
-        @FXML private Button atualizarBtn;
-        @FXML private Button deletarBtn;
-        @FXML private Button limparBtn;
+    @FXML private TextField idField;
+    @FXML private TextField totalField;
 
-        private final ObservableList<CarrinhoItem> itensCarrinho = FXCollections.observableArrayList();
+    @FXML private Button adicionarBtn;
+    @FXML private Button atualizarBtn;
+    @FXML private Button deletarBtn;
+    @FXML private Button limparBtn;
 
-        @Override
-        public void initialize(URL location, ResourceBundle resources) {
-            idCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
-                    String.valueOf(cellData.getValue().getProduto().getId())));
-            totalCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
-                    String.format("R$ %.2f", cellData.getValue().getSubtotal())));
+    private final ObservableList<CarrinhoItem> itensCarrinho = FXCollections.observableArrayList();
 
-            tabelaCarrinhos.setItems(itensCarrinho);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        idCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getProduto().getId()).asObject());
+        produtoCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProduto().getNome()));
+        precoCol.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getProduto().getPreco()).asObject());
+        quantidadeCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantidade()).asObject());
+        totalCol.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getSubtotal()).asObject());
 
-            tabelaCarrinhos.getSelectionModel().selectedItemProperty().addListener((obs, antigo, novo) -> {
-                if (novo != null) {
-                    idField.setText(String.valueOf(novo.getProduto().getId()));
-                    totalField.setText(String.valueOf(novo.getQuantidade()));
-                    atualizarBtn.setDisable(false);
-                    deletarBtn.setDisable(false);
-                } else {
-                    atualizarBtn.setDisable(true);
-                    deletarBtn.setDisable(true);
-                }
-            });
-        }
+        tabelaCarrinhos.setItems(itensCarrinho);
 
-        public void adicionarProduto(ProdutoCRM produto, int quantidade) {
-            for (CarrinhoItem item : itensCarrinho) {
-                if (item.getProduto().getId() == produto.getId()) {
-                    item.setQuantidade(item.getQuantidade() + quantidade);
-                    tabelaCarrinhos.refresh();
-                    return;
-                }
+        tabelaCarrinhos.getSelectionModel().selectedItemProperty().addListener((obs, antigo, novo) -> {
+            if (novo != null) {
+                idField.setText(String.valueOf(novo.getProduto().getId()));
+                totalField.setText(String.valueOf(novo.getQuantidade()));
+                atualizarBtn.setDisable(false);
+                deletarBtn.setDisable(false);
+            } else {
+                atualizarBtn.setDisable(true);
+                deletarBtn.setDisable(true);
             }
-            itensCarrinho.add(new CarrinhoItem(produto, quantidade));
-        }
+        });
+    }
 
-        @FXML
-        public void onAtualizar() {
-            CarrinhoItem selecionado = tabelaCarrinhos.getSelectionModel().getSelectedItem();
-            if (selecionado != null) {
-                int novaQuantidade = Integer.parseInt(totalField.getText());
-                if (novaQuantidade <= 0) {
-                    itensCarrinho.remove(selecionado);
-                } else {
-                    selecionado.setQuantidade(novaQuantidade);
-                }
+    public void adicionarProduto(ProdutoCRM produto, int quantidade) {
+        for (CarrinhoItem item : itensCarrinho) {
+            if (item.getProduto().getId() == produto.getId()) {
+                item.setQuantidade(item.getQuantidade() + quantidade);
                 tabelaCarrinhos.refresh();
+                return;
             }
         }
+        itensCarrinho.add(new CarrinhoItem(produto, quantidade));
+    }
 
-        @FXML
-        public void onDeletar() {
-            CarrinhoItem selecionado = tabelaCarrinhos.getSelectionModel().getSelectedItem();
-            if (selecionado != null) {
+    @FXML
+    public void onAtualizar() {
+        CarrinhoItem selecionado = tabelaCarrinhos.getSelectionModel().getSelectedItem();
+        if (selecionado != null) {
+            int novaQuantidade = Integer.parseInt(totalField.getText());
+            if (novaQuantidade <= 0) {
                 itensCarrinho.remove(selecionado);
+                idField.clear();
+                totalField.clear();
+            } else if (novaQuantidade > selecionado.getProduto().getEstoque()){
+                System.out.println("A quantidade não foi alterada porque não há estoque para a quantidade informada do produto escolhido.");
+            } else {
+                selecionado.setQuantidade(novaQuantidade);
+                System.out.println("A quantidade do produto " + selecionado.getProduto().getNome() + " foi alterada para " + novaQuantidade);
             }
-        }
-
-        @FXML
-        public void onLimpar() {
-            itensCarrinho.clear();
-        }
-
-        @FXML
-        public void onAdicionar() {
-
-        }
-
-        private static CarrinhoController instancia;
-
-        public static CarrinhoController getInstancia() {
-            return instancia;
-        }
-
-        public CarrinhoController() {
-            instancia = this;
+            tabelaCarrinhos.refresh();
         }
     }
+
+    @FXML
+    public void onDeletar() {
+        CarrinhoItem selecionado = tabelaCarrinhos.getSelectionModel().getSelectedItem();
+        if (selecionado != null) {
+            itensCarrinho.remove(selecionado);
+        }
+        idField.clear();
+        totalField.clear();
+    }
+
+    @FXML
+    public void onLimpar() {
+        itensCarrinho.clear();
+        idField.clear();
+        totalField.clear();
+    }
+
+    @FXML
+    public void onAdicionar() {
+
+    }
+
+    @FXML
+    public void onFinalizar() {
+        if (itensCarrinho.isEmpty()) {
+            System.out.println("Carrinho está vazio.");
+            return;
+        }
+
+        ClienteCRM cliente = Sessao.getCliente();
+
+        RedisPublisher publisher = RedisPublisher.getInstancia();
+        publisher.publicarCarrinhoFinalizado(itensCarrinho, cliente.getId());
+        System.out.println("Carrinho finalizado enviado para Redis no canal: carrinho:" + cliente.getId());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sucesso");
+        alert.setHeaderText(null);
+        alert.setContentText("Carrinho finalizado com sucesso!");
+        alert.showAndWait();
+        idField.clear();
+        totalField.clear();
+        onLimpar();
+    }
+
+    private static CarrinhoController instancia;
+
+    public static CarrinhoController getInstancia() {
+        return instancia;
+    }
+
+    public CarrinhoController() {
+        instancia = this;
+    }
+}
