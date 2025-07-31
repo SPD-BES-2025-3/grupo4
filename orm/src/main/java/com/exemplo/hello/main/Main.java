@@ -7,7 +7,7 @@ import com.j256.ormlite.table.TableUtils;
 
 public class Main {
 
-    private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/projetospd";
+    private static final String DATABASE_URL = "jdbc:postgresql://localhost:5433/projetospd";
     private static final String USER = "postgres";
     private static final String PASSWORD = "123456";
 

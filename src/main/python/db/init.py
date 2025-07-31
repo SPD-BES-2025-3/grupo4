@@ -10,5 +10,5 @@ from models.produto import Produto
 import os
 
 async def init_db():
-    client = AsyncIOMotorClient("mongodb://localhost:27017")  # Adjust for your URI
+    client = AsyncIOMotorClient("mongodb://localhost:27017") 
     await init_beanie(database=client["ecommerce"], document_models=[Carrinho, Cliente, Envio, Pagamento, Pedido, Produto])

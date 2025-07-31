@@ -1,225 +1,351 @@
-# E-commerce - Software para Persistência de Dados - Grupo 4
-
-Este projeto é uma aplicação de e-commerce desenvolvida em Java utilizando o framework Spring Boot. O sistema foi modelado para abranger as principais funcionalidades de uma loja virtual, incluindo cadastro de usuários, gerenciamento de produtos, carrinho de compras, pedidos, pagamentos e envio.
-
-## Sumário
-
-- [Introdução](#introdução)
-- [Visão Geral](#visão-geral)
-- [Principais Funcionalidades](#principais-funcionalidades)
-- [Modelo de Domínio](#modelo-de-domínio)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Como Executar](#como-executar)
-- [Estrutura de Pacotes](#estrutura-de-pacotes)
-- [Diagramas](#diagramas)
-- [Plano de Testes](#plano-de-testes)
-
----
-
-## Introdução
-
-O presente projeto tem como objetivo o desenvolvimento de um sistema de e-commerce acadêmico, integrando diferentes tecnologias e abordagens modernas de desenvolvimento de software. A proposta surge da necessidade de criar uma solução robusta, escalável e didaticamente relevante, que permita a aplicação prática de conceitos como arquitetura em camadas, integração de sistemas, persistência de dados relacional e não relacional, além de mensageria para integração entre componentes.
-
-A motivação para este projeto está fundamentada na crescente demanda por sistemas de comércio eletrônico eficientes, seguros e integrados, capazes de atender tanto pequenas quanto grandes operações. Além disso, o projeto visa proporcionar aos integrantes do grupo a oportunidade de aprofundar conhecimentos em frameworks amplamente utilizados no mercado, como JavaFX, Spring Boot, ORMLite, MongoDB, Redis e Lettuce, promovendo o domínio de ferramentas essenciais para o desenvolvimento de aplicações modernas.
-
-O problema a ser solucionado envolve a criação de uma plataforma que permita o cadastro, consulta, atualização e remoção de produtos, clientes e pedidos, além de possibilitar a integração entre diferentes módulos do sistema por meio de APIs RESTful e mecanismos de mensageria. O sistema deverá ser capaz de armazenar dados em bancos relacionais e não relacionais, além de garantir a comunicação eficiente entre seus componentes.
-
-Este projeto, portanto, não apenas atende a uma demanda acadêmica, mas também simula desafios reais enfrentados por equipes de desenvolvimento de software, promovendo a colaboração, a divisão de tarefas e a aplicação de boas práticas de engenharia de software.
-
----
+# E-commerce - Sistema de Persistência de Dados - Grupo 4
 
 ## Visão Geral
 
-A aplicação permite que clientes naveguem por produtos, adicionem itens ao carrinho, realizem pedidos, efetuem pagamentos e acompanhem o envio. Administradores podem gerenciar o catálogo de produtos e o estoque. O sistema foi projetado com base em boas práticas de orientação a objetos e segue uma arquitetura modular.
+Este projeto implementa um sistema de e-commerce completo com arquitetura distribuída, integrando múltiplas tecnologias para demonstrar diferentes abordagens de persistência de dados e comunicação entre sistemas. O projeto é composto por uma aplicação desktop Java (CRM) e um backend Python (API REST), com sincronização em tempo real via Redis.
 
-**Arquitetura:**
-O sistema é dividido nos módulos:
+## Arquitetura do Sistema
 
-1. **Backend RESTful (FastAPI + Beanie + MongoDB)**  
-   Responsável pela lógica de e-commerce, exposição de APIs REST para operações com produtos, carrinho, pedidos e pagamentos. Utiliza MongoDB para dados não relacionais e Redis para cache, sessões e filas, garantindo performance e escalabilidade.
+### Componentes Principais
 
-2. **Interface Desktop (JavaFX + ORMLite + PostgreSQL)**  
-   Aplicação desktop para CRM, administração e gerenciamento dos dados relacionais do cliente, produtos e usuários. Utiliza PostgreSQL via ORMLite para persistência.
+1. **Aplicação Desktop Java (CRM)**
+   - Interface gráfica JavaFX
+   - Persistência PostgreSQL via ORMLite
+   - Gerenciamento de produtos, clientes e pedidos
+   - Publicação de eventos via Redis
 
-3. **Integração**  
-   Comunicação entre os módulos feita via chamadas REST API e mecanismos de mensageria (ex: Redis). Os dados dos clientes são sincronizados entre o CRM (PostgreSQL) e o backend e-commerce (MongoDB), assegurando consistência entre os sistemas.
+2. **Backend Python (API REST)**
+   - API FastAPI para operações de e-commerce
+   - Persistência MongoDB via Beanie ODM
+   - Receptor de eventos Redis
+   - Sincronização automática de dados
 
----
+3. **Sistema de Mensageria**
+   - Redis como message broker
+   - Comunicação assíncrona entre componentes
+   - Sincronização em tempo real
 
-## Principais Funcionalidades
+### Fluxo de Dados
 
-- **Cadastro e autenticação de usuários (clientes e administradores)**
-- **Gerenciamento de produtos e categorias**
-- **Carrinho de compras**
-- **Processamento de pedidos**
-- **Pagamentos**
-- **Rastreamento de envio**
-- **Gestão de estoque**
-
----
-
-## Modelo de Domínio
-
-O sistema é composto pelos seguintes principais componentes:
-
-### Usuário
-
-- **Usuario**: Classe base para todos os usuários, contendo informações comuns como nome, email, senha e endereço.
-- **Cliente**: Herda de Usuario, possui telefone e funcionalidades como adicionar ao carrinho e fazer pedidos.
-- **Administrador**: Herda de Usuario, pode adicionar/remover produtos e atualizar o estoque.
-
-### Produto e Estoque
-
-- **Produto**: Representa um item à venda, com atributos como nome, descrição, preço, estoque e categoria.
-
-### Carrinho e Pedido
-
-- **Carrinho**: Armazena itens selecionados pelo cliente antes da finalização da compra.
-- **ItemCarrinho**: Representa um produto e sua quantidade no carrinho.
-- **Pedido**: Registra uma compra realizada, associando cliente, pagamento e envio.
-
-### Pagamento e Envio
-
-- **Pagamento**: Detalha o método, valor e status do pagamento de um pedido.
-- **Envio**: Gerencia o endereço de entrega, data e status do envio.
-
----
+```
+Java (PostgreSQL) → Redis → Python → MongoDB
+```
 
 ## Tecnologias Utilizadas
 
-### **Frontend Desktop (CRM)**
+### Backend Java (CRM)
+- **Java 21** - Linguagem principal
+- **JavaFX** - Interface gráfica desktop
+- **ORMLite** - ORM para PostgreSQL
+- **PostgreSQL** - Banco de dados relacional
+- **Maven** - Gerenciamento de dependências
+- **JUnit 4** - Testes unitários
+- **Mockito** - Framework de mocking
 
-- **JavaFX** – Interface gráfica para o sistema desktop (CRM)
-- **BlueJ** – Ambiente de desenvolvimento para a aplicação Java
-- **ORM manual ou JDBC** – Acesso ao PostgreSQL via JDBC ou ORM próprio
-- **PostgreSQL** – Banco de dados relacional para gerenciamento de clientes e administrativos
+### Backend Python (API)
+- **Python 3.12** - Linguagem principal
+- **FastAPI** - Framework web para APIs
+- **Beanie** - ODM para MongoDB
+- **Motor** - Driver assíncrono MongoDB
+- **Redis-py** - Cliente Redis Python
+- **Pytest** - Framework de testes
+- **Uvicorn** - Servidor ASGI
 
----
+### Infraestrutura
+- **Redis** - Message broker e cache
+- **MongoDB** - Banco de dados NoSQL
+- **PostgreSQL** - Banco de dados relacional
+- **Docker** - Containerização
+- **Docker Compose** - Orquestração de containers
 
-### **Backend E-commerce (API REST)**
+## Estrutura do Projeto
 
-- **Python 3.12+**
-- **FastAPI** – Framework leve e moderno para APIs REST
-- **Beanie** – ODM baseado em Pydantic para interação com MongoDB
-- **Redis** – Cache, gerenciamento de sessões e/ou fila de mensagens para melhorar performance e escalabilidade
-- **MongoDB** – Banco de dados NoSQL utilizado para produtos, carrinho, pedidos, etc.
-- **Pytest** – Framework para testes automatizados
-- **Docker** – Utilizado para containerizar a API, MongoDB e ambientes de teste
+```
+grupo4/
+├── orm/                          # Aplicação Java (CRM)
+│   ├── src/main/java/
+│   │   ├── com/exemplo/hello/
+│   │   │   ├── controller/       # Controladores JavaFX
+│   │   │   ├── model/           # Entidades de domínio
+│   │   │   ├── redis/           # Publicadores Redis
+│   │   │   └── view/            # Views JavaFX
+│   │   └── resources/
+│   │       └── view/            # Arquivos FXML
+│   ├── src/test/java/           # Testes unitários Java
+│   ├── pom.xml                  # Dependências Maven
+│   └── docker-compose.yml       # Configuração Docker
+├── src/main/python/             # Backend Python (API)
+│   ├── api/                     # Rotas FastAPI
+│   ├── models/                  # Modelos Beanie
+│   ├── services/                # Lógica de negócio
+│   ├── repositories/            # Acesso a dados
+│   ├── config/                  # Configurações
+│   ├── testes/                  # Testes Python
+│   ├── redis_receiver_final.py  # Receptor Redis principal
+│   ├── start_system.sh         # Script de inicialização
+│   ├── test_system.sh          # Script de teste
+│   └── requirements.txt         # Dependências Python
+├── docs/                        # Documentação e diagramas
+├── db/                          # Scripts de banco de dados
+└── README.md                    # Este arquivo
+```
 
----
+## Funcionalidades Implementadas
 
-### **Integração**
+### Aplicação Java (CRM)
+- **Gerenciamento de Produtos**: CRUD completo com interface gráfica
+- **Gerenciamento de Clientes**: Cadastro e consulta de clientes
+- **Gerenciamento de Pedidos**: Processamento de pedidos
+- **Carrinho de Compras**: Adição e remoção de produtos
+- **Publicação de Eventos**: Sincronização via Redis
+- **Interface Gráfica**: JavaFX com FXML
 
-- **Comunicação via REST API** entre a aplicação Java (CRM) e o backend Python (e-commerce)
-- Dados sincronizados entre **Cliente\_Postgre** e **Cliente\_Mongo**
+### Backend Python (API)
+- **API REST**: Endpoints para produtos, clientes, pedidos
+- **Receptor Redis**: Sincronização em tempo real
+- **Persistência MongoDB**: Armazenamento de dados
+- **Validação de Dados**: Pydantic models
+- **Testes Automatizados**: Pytest
 
----
+### Sistema de Sincronização
+- **Comunicação Assíncrona**: Redis Pub/Sub
+- **Sincronização Automática**: Java → Python → MongoDB
+- **Tratamento de Eventos**: CREATE, UPDATE, DELETE
+- **Logs Detalhados**: Monitoramento de operações
 
 ## Como Executar
 
-1. **Clone o repositório:**
+### Pré-requisitos
 
-   ```bash
-   git clone https://github.com/SPD-BES-2025-3/grupo4.git
-   cd ecommerce
-   ```
+1. **Java 21** instalado
+2. **Python 3.12** instalado
+3. **Docker** e **Docker Compose** instalados
+4. **Git** instalado
 
-2. **Configure as variáveis de ambiente:**
-   - Copie o arquivo de exemplo:
+### Instalação e Configuração
 
-     ```bash
-     cp .example.env .env
-     ```
+#### 1. Clonar o Repositório
+```bash
+git clone https://github.com/SPD-BES-2025-3/grupo4.git
+cd grupo4
+```
 
-   - Edite o arquivo `.env` e ajuste os valores das variáveis conforme seu ambiente (usuário, senha e nome do banco de dados).
+#### 2. Configurar Banco de Dados
+```bash
+# Iniciar PostgreSQL e MongoDB via Docker
+docker-compose up -d
 
-3. **Se necessário, ajuste também o arquivo `src/main/resources/application.properties` para garantir que as propriedades estejam configuradas para ler as variáveis de ambiente.**
+# Verificar se os serviços estão rodando
+docker ps
+```
 
-4. **Execute a aplicação e o banco de dados via Docker Compose:**
+#### 3. Configurar Aplicação Java
+```bash
+cd orm
+mvn clean install
+```
 
-   ```bash
-   docker-compose up --build
-   ```
+#### 4. Configurar Backend Python
+```bash
+cd src/main/python
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-   Isso irá subir tanto o banco de dados PostgreSQL quanto a aplicação Spring Boot em containers separados.
+### Execução do Sistema
 
-5. **Acesse:**  
-   `http://localhost:8080`
+#### Opção 1: Inicialização Automática (Recomendada)
+```bash
+cd src/main/python
+./start_system.sh
+```
+
+#### Opção 2: Inicialização Manual
+
+1. **Iniciar Receptor Python**
+```bash
+cd src/main/python
+source venv/bin/activate
+python redis_receiver_final.py
+```
+
+2. **Executar Aplicação Java**
+```bash
+cd orm
+mvn javafx:run
+```
+
+3. **Testar Sistema**
+```bash
+cd src/main/python
+./test_system.sh
+```
+
+### Verificação do Sistema
+
+#### Verificar Status dos Serviços
+```bash
+# Verificar se o receptor Python está rodando
+ps aux | grep redis_receiver_final
+
+# Verificar produtos no MongoDB
+mongosh --eval "use ecommerce; db.produtos.find().pretty()"
+
+# Verificar conexão Redis
+redis-cli ping
+```
+
+#### Testar Funcionalidades
+1. **Criar Produto no Java**: Use a interface gráfica para adicionar produtos
+2. **Verificar Sincronização**: Observe os logs do Python
+3. **Consultar MongoDB**: Verifique se os dados foram salvos
+
+## Testes
+
+### Testes Java
+```bash
+cd orm
+mvn test
+```
+
+### Testes Python
+```bash
+cd src/main/python
+source venv/bin/activate
+pytest
+```
+
+### Teste de Integração
+```bash
+cd src/main/python
+./test_system.sh
+```
+
+## Monitoramento e Logs
+
+### Logs do Sistema
+- **Java**: Logs no console da aplicação
+- **Python**: Logs detalhados no console do receptor
+- **Redis**: Monitoramento via `redis-cli monitor`
+- **MongoDB**: Logs via `docker logs <container_id>`
+
+### Comandos de Monitoramento
+```bash
+# Verificar processos ativos
+ps aux | grep -E "(redis_receiver|java|python)"
+
+# Monitorar Redis
+redis-cli monitor
+
+# Verificar dados MongoDB
+mongosh --eval "use ecommerce; db.produtos.countDocuments()"
+```
+
+## Troubleshooting
+
+### Problemas Comuns
+
+#### 1. Redis não conecta
+```bash
+# Verificar se Redis está rodando
+redis-cli ping
+
+# Iniciar Redis manualmente
+redis-server --daemonize yes
+```
+
+#### 2. MongoDB não conecta
+```bash
+# Verificar container Docker
+docker ps | grep mongo
+
+# Reiniciar container
+docker restart <container_id>
+```
+
+#### 3. Receptor Python não recebe mensagens
+```bash
+# Verificar se está rodando
+ps aux | grep redis_receiver_final
+
+# Reiniciar receptor
+pkill -f redis_receiver_final.py
+cd src/main/python && source venv/bin/activate && python redis_receiver_final.py
+```
+
+#### 4. Erro de dependências Python
+```bash
+# Reinstalar dependências
+cd src/main/python
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Desenvolvimento
+
+### Estrutura de Desenvolvimento
+
+1. **Desenvolvimento Java**: Use IntelliJ IDEA ou Eclipse
+2. **Desenvolvimento Python**: Use VS Code ou PyCharm
+3. **Banco de Dados**: Use pgAdmin para PostgreSQL e MongoDB Compass para MongoDB
+
+### Fluxo de Desenvolvimento
+
+1. **Implementar funcionalidade no Java**
+2. **Testar publicação de eventos**
+3. **Implementar processamento no Python**
+4. **Testar sincronização completa**
+5. **Executar testes automatizados**
+
+### Boas Práticas
+
+- **Commits frequentes** com mensagens descritivas
+- **Testes unitários** para todas as funcionalidades
+- **Documentação** atualizada
+- **Logs estruturados** para debugging
+- **Validação de dados** em ambas as aplicações
+
+## Documentação Técnica
+
+### Diagramas de Arquitetura
+- **Diagrama de Classes**: `docs/diagrama-de-classe-v1.png`
+- **Diagrama de Componentes**: `docs/diagrama-componentes.png`
+- **Diagrama de Sequência**: `docs/diagrama-sequencia.png`
+- **Diagrama de Classes por BD**: `docs/diagrama-classes-bd.png`
+
+### Documentação Específica
+- **Sistema Redis**: `src/main/python/README_SISTEMA_COMPLETO.md`
+- **API Python**: `src/main/python/README.md`
+- **Aplicação Java**: `orm/README.md`
+
+## Contribuição
+
+### Padrões de Código
+- **Java**: Seguir convenções Java e usar JavaDoc
+- **Python**: Seguir PEP 8 e usar type hints
+- **Testes**: Cobertura mínima de 80%
+- **Documentação**: Manter README atualizado
+
+### Processo de Desenvolvimento
+1. Criar branch para nova funcionalidade
+2. Implementar com testes
+3. Executar testes completos
+4. Criar pull request
+5. Code review
+6. Merge após aprovação
+
+## Licença
+
+Este projeto é desenvolvido para fins acadêmicos no contexto da disciplina de Software para Persistência de Dados.
+
+## Contato
+
+**Grupo 4 - SPD 2025.3**
+- João Pedro Brito
+- Leonardo Côrtes  
+- Gabriel Mota
 
 ---
 
-## Estrutura de Pacotes
-
-- `controllers/` - Controladores REST e web (camada Controller do MVC).
-- `models/` - Entidades do domínio (camada Model do MVC).
-- `services/` - Lógica de negócio (camada Service, intermediando Controllers e Models).
-- `repositories/` - Interfaces de acesso a dados.
-
----
-
-## Diagramas
-
-O sistema é composto por três grandes módulos:
-
-- **Aplicação Desktop:** Interface gráfica (JavaFX) conectada a um controlador MVC, que utiliza ORMLite para persistência em banco relacional (PostgreSQL).
-- **API RESTful:** Backend central (FastAPI) que expõe endpoints REST e acessa dados não-relacionais via MongoDB com Beanie (ODM baseada em Pydantic).
-- **Integrador de Entidades:** (Planejado para etapas futuras) módulo responsável por integração e comunicação assíncrona entre componentes.
-
-A comunicação ocorre da seguinte forma:
-
-- A aplicação desktop pode operar localmente e sincronizar dados com a API via HTTP/REST.
-- A API centraliza a lógica de negócio e integra dados relacionais.
-
-Os diagramas a seguir ilustram a arquitetura e o fluxo de integração:
-
-![Diagrama de Classes](docs/diagrama-de-classe-v1.png)  
-![Diagrama de componentes](docs/diagrama-componentes.png)  
-![Diagrama de sequência](docs/diagrama-sequencia.png)  
-![Diagrama de classes por BD](docs/diagrama-classes-bd.png)
-
----
-
-## Divisão de Tarefas e Cronograma
-
-| Tarefa                                    | Responsável      | Prazo        |
-|-------------------------------------------|------------------|--------------|
-| Entrega 1                                 | Todos            | 22/07/2025   |
-| PostgreSQL + ORMLite + JavaFX             | João Pedro Brito | 25/07/2025   |
-| MongoDB + FastAPI + Redis prep            | Leonardo Côrtes  | 25/07/2025   |
-| Diagramas UML + Documentação              | Gabriel Mota     | 25/07/2025   |
-| Testes unitários                          | Gabriel Mota     | 26/07/2025   |
-| Documentação final + relatórios           | Gabriel Mota     | 27/07/2025   |
-| Integração e revisão final                | Todos            | 27/07/2025   |
-| Entrega final                             | Todos            | 28/07/2025   |
-
-<!-- ---
-
-## Detalhamento do Plano de Trabalho e Uso das Ferramentas
-
-O projeto será desenvolvido em etapas, conforme o cronograma acima. As principais tecnologias e ferramentas serão utilizadas da seguinte forma:
-
-- **JavaFX**: Para a interface gráfica da aplicação desktop (a ser implementada nas próximas etapas).
-- **Spring Boot**: Para a API RESTful, facilitando a criação de endpoints e integração com bancos de dados.
-- **ORMLite**: Para persistência de dados na aplicação desktop (etapa futura).
-- **MongoDB**: Banco de dados NoSQL para armazenar dados não relacionais (etapa futura).
-- **Redis + Lettuce**: Para integração entre entidades e comunicação Pub/Sub (etapa 2).
-- **JUnit**: Para a criação e execução de testes unitários.
-- **Docker/Docker Compose**: Para facilitar a execução e integração dos serviços.
- -->
-<!-- ---
-
-## Domínio do Ambiente, Modelagem e Documentação
-
-O grupo está se familiarizando com as principais ferramentas e frameworks do projeto, incluindo bibliotecas de ORM/ODM, bancos de dados relacionais e não relacionais, e ferramentas de mensageria. A modelagem do sistema é feita utilizando diagramas UML (classes, componentes, sequência), que auxiliam na visualização da arquitetura e das interações do sistema. A documentação é produzida em Markdown para facilitar a leitura e manutenção, e será complementada com JavaDoc nas próximas etapas.
- -->
----
-
-## Plano de Testes
-
-Os testes unitários serão implementados utilizando JUnit e PyTest. Inicialmente, os testes cobrirão as classes principais do domínio e, posteriormente, serão expandidos para repositórios e controllers. Exemplos de casos de teste planejados:
-
-- Criação de um novo usuário e verificação dos dados persistidos.
-- Cadastro e consulta de produtos.
-- Processamento de pedidos e atualização de status.
-
----
+**Sistema funcionando com sucesso: Java → PostgreSQL → Redis → Python → MongoDB**

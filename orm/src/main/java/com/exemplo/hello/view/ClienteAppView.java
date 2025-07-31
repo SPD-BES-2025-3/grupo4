@@ -19,6 +19,7 @@ public class ClienteAppView extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
+
         } catch (Exception e) {
             System.out.println("Erro ao carregar a tela principal:");
             e.printStackTrace();
