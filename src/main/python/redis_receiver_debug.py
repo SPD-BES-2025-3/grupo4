@@ -42,7 +42,7 @@ class RedisReceiverDebug:
             pubsub = self.redis_client.pubsub()
             pubsub.subscribe('produtos')
             
-            print("🔍 Escutando canal 'produtos'...")
+            print("Escutando canal 'produtos'...")
             print("Pressione Ctrl+C para parar")
             
             for message in pubsub.listen():
@@ -88,7 +88,7 @@ class RedisReceiverDebug:
                 print("   Dados do produto não encontrados")
                 return
             
-            print(f"   🔄 Processando: {acao} - {produto_data.get('nome')}")
+            print(f"Processando: {acao} - {produto_data.get('nome')}")
             
             # Preparar dados para MongoDB
             produto_mongo = {
@@ -108,7 +108,7 @@ class RedisReceiverDebug:
             elif acao in ["DELETE", "removido"]:
                 await self.deletar_produto(produto_data.get("id"))
             else:
-                print(f"   ⚠️ Ação desconhecida: {acao}")
+                print(f"   Ação desconhecida: {acao}")
                 
         except Exception as e:
             print(f"   Erro ao processar mensagem: {e}")
@@ -119,7 +119,7 @@ class RedisReceiverDebug:
             # Verificar se já existe
             existente = await self.db.produtos.find_one({"nome": dados_produto["nome"]})
             if existente:
-                print(f"   ⚠️ Produto já existe: {dados_produto['nome']}")
+                print(f"   Produto já existe: {dados_produto['nome']}")
                 return
             
             # Inserir produto
@@ -158,7 +158,7 @@ class RedisReceiverDebug:
                 await self.db.produtos.delete_one({"_id": produto_para_deletar["_id"]})
                 print(f"   Produto deletado: {produto_para_deletar['nome']}")
             else:
-                print(f"   ⚠️ Produto não encontrado para deleção: {produto_id}")
+                print(f"   Produto não encontrado para deleção: {produto_id}")
                 
         except Exception as e:
             print(f"   Erro ao deletar produto: {e}")
@@ -180,7 +180,7 @@ async def main():
     if not await receiver.test_mongo_connection():
         return
     
-    print("🚀 Iniciando receptor Redis...")
+    print(" Iniciando receptor Redis...")
     
     try:
         # Executar em thread separada
@@ -194,7 +194,7 @@ async def main():
             await asyncio.sleep(1)
             
     except KeyboardInterrupt:
-        print("\n🛑 Parando receptor...")
+        print("\nParando receptor...")
         receiver.stop()
 
 if __name__ == "__main__":

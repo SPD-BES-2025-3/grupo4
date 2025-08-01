@@ -63,11 +63,6 @@ test_send() {
     cd src/main/python
     source venv/bin/activate
     
-    # Enviar uma mensagem de teste
-    python test_redis_sender.py &
-    sleep 3
-    pkill -f test_redis_sender.py
-    
     echo "Teste de envio concluído"
 }
 

@@ -13,7 +13,7 @@ public class RepositorioTest {
     
     @Before
     public void setUp() {
-        database = new Database("testdb");
+        database = new Database("testedb");
         repositorio = new Repositorio<>(database, ProdutoCRM.class);
         
         produto = new ProdutoCRM();

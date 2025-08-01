@@ -27,7 +27,7 @@ def test_redis_connection():
         # Escutar mensagens
         for message in pubsub.listen():
             if message['type'] == 'message':
-                print(f"📨 Mensagem recebida: {message['data']}")
+                print(f"Mensagem recebida: {message['data']}")
                 try:
                     data = json.loads(message['data'])
                     print(f"   Ação: {data.get('acao')}")

@@ -43,7 +43,7 @@ class RedisReceiverFinal:
             pubsub = self.redis_client.pubsub()
             pubsub.subscribe('produtos')
             
-            print("🔍 Escutando canal 'produtos'...")
+            print("Escutando canal 'produtos'...")
             print("Pressione Ctrl+C para parar")
             
             for message in pubsub.listen():
@@ -51,7 +51,7 @@ class RedisReceiverFinal:
                     break
                 
                 if message['type'] == 'message':
-                    print(f"📨 Mensagem recebida: {message['data']}")
+                    print(f" Mensagem recebida: {message['data']}")
                     try:
                         data = json.loads(message['data'])
                         print(f"   Ação: {data.get('acao')}")
@@ -78,7 +78,7 @@ class RedisReceiverFinal:
                 print("   Dados do produto não encontrados")
                 return
             
-            print(f"   🔄 Processando: {acao} - {produto_data.get('nome')}")
+            print(f"   Processando: {acao} - {produto_data.get('nome')}")
             
             # Preparar dados para MongoDB
             produto_mongo = {
@@ -98,7 +98,7 @@ class RedisReceiverFinal:
             elif acao in ["DELETE", "removido"]:
                 self.deletar_produto_sync(produto_data.get("id"))
             else:
-                print(f"   ⚠️ Ação desconhecida: {acao}")
+                print(f"   Ação desconhecida: {acao}")
                 
         except Exception as e:
             print(f"   Erro ao processar mensagem: {e}")
@@ -113,7 +113,7 @@ class RedisReceiverFinal:
             # Verificar se já existe
             existente = db.produtos.find_one({"nome": dados_produto["nome"]})
             if existente:
-                print(f"   ⚠️ Produto já existe: {dados_produto['nome']}")
+                print(f"   Produto já existe: {dados_produto['nome']}")
                 mongo_client.close()
                 return
             
@@ -165,7 +165,7 @@ class RedisReceiverFinal:
                 db.produtos.delete_one({"_id": produto_para_deletar["_id"]})
                 print(f"   Produto deletado: {produto_para_deletar['nome']}")
             else:
-                print(f"   ⚠️ Produto não encontrado para deleção: {produto_id}")
+                print(f"   Produto não encontrado para deleção: {produto_id}")
             
             mongo_client.close()
                 
@@ -186,14 +186,14 @@ def main():
     if not receiver.test_connections():
         return
     
-    print("🚀 Iniciando receptor Redis...")
+    print("Iniciando receptor Redis...")
     
     try:
         # Escutar Redis
         receiver.listen_redis()
             
     except KeyboardInterrupt:
-        print("\n🛑 Parando receptor...")
+        print("\nParando receptor...")
         receiver.stop()
 
 if __name__ == "__main__":
