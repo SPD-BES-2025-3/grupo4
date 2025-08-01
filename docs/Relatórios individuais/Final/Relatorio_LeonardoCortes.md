@@ -8,8 +8,8 @@ Fui responsável pela preparação do backend com Beanie e MongoDB. Também part
 
 - Estruturei o projeto Beanie e organizei as dependências do backend.
 - Colaborei na discussão e documentação da arquitetura do sistema.
-- Ajudei na elaboração e revisão da documentação e dos diagramas UML.
-- A integração completa com Redis será realizada nas próximas etapas.
+- Ajudei na revisão da documentação e dos diagramas UML.
+- A integração completa com Redis foi iniciada por mim e finalizada pelo João Pedro. 
 
 ## 3. Contribuição além do atribuído
 
@@ -18,4 +18,4 @@ Fui responsável pela preparação do backend com Beanie e MongoDB. Também part
 
 ## 4. Considerações gerais
 
-Aprendi mais sobre organização de projetos colaborativos e integração de tecnologias Java. O principal desafio foi alinhar as tarefas e documentações entre os membros. Para as próximas etapas, ficará pendente a implementação efetiva das integrações planejadas e a ampliação dos testes automatizados.
+Aprendi mais sobre organização de projetos colaborativos e integração de tecnologias Java e Python. O principal desafio foi alinhar as tarefas e documentações entre os membros.
